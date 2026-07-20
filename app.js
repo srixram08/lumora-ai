@@ -1,9 +1,9 @@
 /* ══════════════════════════════════════════════════
-   LUMORA ANALYTICS — Application JavaScript
-   Features:
-   1. Two Login System (Admin vs Manager)
-   2. Working Notification Tray Dropdown & Clear Badges
-   3. Simple Clean Rupee Data Engine
+   LUMORA ANALYTICS — Application JavaScript Engine
+   1. Colorlib Inspired Auth & Quick Demo Profiles
+   2. Interactive Sales Creation & Live Revenue Calculation
+   3. Working Notification Tray Dropdown
+   4. Supabase Project Integration (lumora)
    ══════════════════════════════════════════════════ */
 
 'use strict';
@@ -23,28 +23,10 @@ function initSupabase() {
       supabaseClient = window.supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_ANON_KEY);
       console.log('⚡ Connected to Supabase Project: lumora (tacegqonwgjbsfvbbtrc)');
     } catch (err) {
-      console.warn('Supabase initialization notice:', err);
+      console.warn('Supabase notice:', err);
     }
   }
 }
-
-window.testSupabaseConnection = function() {
-  const urlInput = $('#supabase-project-url')?.value || SUPABASE_PROJECT_URL;
-  const keyInput = $('#supabase-anon-key')?.value || SUPABASE_ANON_KEY;
-
-  if (window.supabase && typeof window.supabase.createClient === 'function') {
-    try {
-      supabaseClient = window.supabase.createClient(urlInput, keyInput);
-      alert('⚡ Supabase Connection Successful!\nProject: lumora\nURL: ' + urlInput);
-      const statusText = $('#supabase-status-text');
-      if (statusText) statusText.textContent = 'Connected to Supabase (lumora)';
-    } catch (e) {
-      alert('Connection error: ' + e.message);
-    }
-  } else {
-    alert('⚡ Supabase SDK is ready and configured!\nProject URL: ' + urlInput);
-  }
-};
 
 // User Roles Config
 const Profiles = {
@@ -67,30 +49,60 @@ const Profiles = {
 let currentRole = 'admin';
 let unreadNotifications = 3;
 
-// ─── Two-Login Selection & Auth ────────────────────
+// State Data (In Rupees ₹)
+let totalRevenueVal = 5000000.00; // ₹50.0 Lakhs
+let totalProfitVal = 1850000.00;  // ₹18.5 Lakhs
+let totalOrdersCount = 1420;
+let totalCustomersCount = 4500;
+
+// ─── AUTH & DEMO PROFILES ──────────────────────────
 function initAuth() {
-  // Auth Tab Switcher
+  const loginForm = $('#login-form');
+  const signupForm = $('#signup-form');
+  const loginScreen = $('#login-screen');
+  const appLayout = $('#app-layout');
+
   window.switchAuthTab = function(tabKey) {
-    const signinTab = $('#tab-signin-btn');
-    const signupTab = $('#tab-signup-btn');
     const signinContainer = $('#auth-signin-container');
     const signupContainer = $('#auth-signup-container');
 
     if (tabKey === 'signup') {
-      signinTab?.classList.remove('active');
-      signupTab?.classList.add('active');
       if (signinContainer) signinContainer.style.display = 'none';
-      if (signupContainer) signupContainer.style.display = 'flex';
+      if (signupContainer) signupContainer.style.display = 'block';
     } else {
-      signupTab?.classList.remove('active');
-      signinTab?.classList.add('active');
       if (signupContainer) signupContainer.style.display = 'none';
-      if (signinContainer) signinContainer.style.display = 'flex';
+      if (signinContainer) signinContainer.style.display = 'block';
     }
   };
 
-  // Sign Up Form Submit
-  const signupForm = $('#signup-form');
+  window.quickDemoLogin = function(roleKey) {
+    if (!Profiles[roleKey]) return;
+    currentRole = roleKey;
+
+    $('#demo-admin-chip')?.classList.toggle('active', roleKey === 'admin');
+    $('#demo-manager-chip')?.classList.toggle('active', roleKey === 'manager');
+
+    const emailInput = $('#login-email');
+    if (emailInput) emailInput.value = Profiles[roleKey].email;
+
+    doLogin(roleKey);
+  };
+
+  loginForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const emailVal = $('#login-email')?.value;
+    const passVal = $('#login-password')?.value;
+
+    if (supabaseClient && supabaseClient.auth) {
+      try {
+        await supabaseClient.auth.signInWithPassword({ email: emailVal, password: passVal });
+      } catch (err) {
+        console.warn('Auth notice:', err);
+      }
+    }
+    doLogin(currentRole);
+  });
+
   signupForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = $('#signup-name')?.value || 'New User';
@@ -98,7 +110,6 @@ function initAuth() {
     const roleKey = $('#signup-role')?.value || 'manager';
     const password = $('#signup-password')?.value;
 
-    // Create user object for dynamic profile session
     Profiles['custom'] = {
       email,
       name,
@@ -111,57 +122,15 @@ function initAuth() {
       try {
         await supabaseClient.auth.signUp({ email, password });
       } catch (err) {
-        console.warn('Supabase Auth SignUp notice:', err);
+        console.warn('SignUp notice:', err);
       }
     }
-
     doLogin('custom');
-  });
-
-  window.quickDemoLogin = function(roleKey) {
-    if (!Profiles[roleKey]) return;
-    currentRole = roleKey;
-
-    // Toggle demo chip UI
-    $('#demo-admin-chip')?.classList.toggle('active', roleKey === 'admin');
-    $('#demo-manager-chip')?.classList.toggle('active', roleKey === 'manager');
-
-    // Fill form and log in immediately
-    const emailInput = $('#login-email');
-    if (emailInput) emailInput.value = Profiles[roleKey].email;
-
-    doLogin(roleKey);
-  };
-
-  loginForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const emailVal = $('#login-email')?.value;
-    const passVal = $('#login-password')?.value;
-
-    // Try Supabase Auth if available
-    if (supabaseClient && supabaseClient.auth) {
-      try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-          email: emailVal,
-          password: passVal
-        });
-        if (error) {
-          console.log('Supabase Auth notice (using profile session):', error.message);
-        } else if (data?.user) {
-          console.log('⚡ Supabase Auth User Logged In:', data.user.email);
-        }
-      } catch (err) {
-        console.warn('Auth fallback:', err);
-      }
-    }
-
-    doLogin(currentRole);
   });
 
   window.doLogin = function(roleKey = 'admin') {
     const p = Profiles[roleKey] || Profiles.admin;
 
-    // Update user info across topbar, sidebar, and profile view
     const userAvatarEl = $('#topbar-user-avatar');
     const sbAvatarEl = $('#sidebar-user-avatar');
     const sbNameEl = $('#sidebar-user-name');
@@ -181,7 +150,6 @@ function initAuth() {
     loginScreen.style.display = 'none';
     appLayout.style.display = 'flex';
 
-    // Render charts
     setTimeout(() => {
       initHeroChart();
       initHeroDonut();
@@ -192,7 +160,6 @@ function initAuth() {
     if (confirm('Log out of Lumora Analytics?')) {
       appLayout.style.display = 'none';
       loginScreen.style.display = 'flex';
-      // Close dropdown if open
       $('#notif-dropdown')?.classList.remove('open');
     }
   };
@@ -204,25 +171,20 @@ function initNotificationTray() {
   const dropdown = $('#notif-dropdown');
   const markAllBtn = $('#btn-mark-all-read');
 
-  // Toggle notification tray on bell click
   bellBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     dropdown?.classList.toggle('open');
   });
 
-  // Close when clicking outside
   document.addEventListener('click', (e) => {
     if (dropdown && !dropdown.contains(e.target) && !bellBtn.contains(e.target)) {
       dropdown.classList.remove('open');
     }
   });
 
-  // Mark all as read
   markAllBtn?.addEventListener('click', () => {
     unreadNotifications = 0;
     updateNotificationBadges();
-
-    // Mark items visually
     $$('.nd-item').forEach(item => item.classList.remove('unread'));
   });
 
@@ -259,7 +221,7 @@ function updateNotificationBadges() {
   }
 }
 
-// ─── View Titles Mapping ───────────────────────────
+// ─── VIEW TITLES & ROUTING ────────────────────────
 const ViewTitles = {
   'dashboard': 'Dashboard Overview',
   'analytics': 'Sales & Revenue Analytics (₹)',
@@ -276,7 +238,6 @@ const ViewTitles = {
   'profile': '👤 User Profile',
 };
 
-// ─── Navigation & View Switching ───────────────────
 function initNavigation() {
   const navItems = $$('.nav-item[data-view]');
   const viewTitle = $('#view-title');
@@ -323,7 +284,110 @@ function initNavigation() {
   });
 }
 
-// ─── Drawing Helpers ───────────────────────────────
+// ─── REALTIME SALES & REVENUE CALCULATION ENGINE ────
+window.openAddSaleModal = function() {
+  $('#add-sale-modal').style.display = 'flex';
+  recalculateSaleTotal();
+};
+
+window.closeAddSaleModal = function() {
+  $('#add-sale-modal').style.display = 'none';
+};
+
+window.recalculateSaleTotal = function() {
+  const unitPrice = parseFloat($('#sale-product')?.value || 499999);
+  const qty = parseInt($('#sale-qty')?.value || 1, 10);
+  const rev = unitPrice * qty;
+  const profit = rev * 0.37;
+
+  const revEl = $('#calc-rev-val');
+  const profitEl = $('#calc-profit-val');
+
+  if (revEl) revEl.textContent = `₹${rev.toLocaleString('en-IN')}`;
+  if (profitEl) profitEl.textContent = `₹${Math.round(profit).toLocaleString('en-IN')}`;
+};
+
+window.handleCreateSale = async function(event) {
+  event.preventDefault();
+  const customer = $('#sale-customer')?.value || 'New Client';
+  const prodSelect = $('#sale-product');
+  const prodName = prodSelect?.options[prodSelect.selectedIndex]?.dataset?.name || 'Lumora Enterprise Suite';
+  const unitPrice = parseFloat(prodSelect?.value || 499999);
+  const qty = parseInt($('#sale-qty')?.value || 1, 10);
+  const region = $('#sale-region')?.value || 'Bengaluru';
+
+  const saleRevenue = unitPrice * qty;
+  const saleProfit = saleRevenue * 0.37;
+
+  // 1. Update State & Metrics
+  totalRevenueVal += saleRevenue;
+  totalProfitVal += saleProfit;
+  totalOrdersCount += 1;
+
+  // 2. Format In Lakhs/Crores
+  const revLakhs = (totalRevenueVal / 100000).toFixed(1);
+  const profitLakhs = (totalProfitVal / 100000).toFixed(1);
+
+  const kpiRev = $('#kpi-val-revenue');
+  const kpiProfit = $('#kpi-val-profit');
+  const kpiOrders = $('#kpi-val-orders');
+  const revMrr = $('#rev-view-mrr');
+
+  if (kpiRev) kpiRev.textContent = `₹${revLakhs} Lakhs`;
+  if (kpiProfit) kpiProfit.textContent = `₹${profitLakhs} Lakhs`;
+  if (kpiOrders) kpiOrders.textContent = totalOrdersCount.toLocaleString('en-IN');
+  if (revMrr) revMrr.textContent = `₹${revLakhs} Lakhs`;
+
+  // 3. Append to Orders Table
+  const ordersTbody = $('#orders-tbody');
+  if (ordersTbody) {
+    const orderId = `#ORD-${Math.floor(1000 + Math.random() * 9000)}`;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${orderId}</td>
+      <td>${customer}</td>
+      <td>Just now</td>
+      <td>₹${saleRevenue.toLocaleString('en-IN')}</td>
+      <td><span class="badge-active">Completed</span></td>
+    `;
+    ordersTbody.insertBefore(tr, ordersTbody.firstChild);
+  }
+
+  // 4. Append to Live Feed
+  const feed = $('#live-feed');
+  if (feed) {
+    const item = document.createElement('div');
+    item.className = 'lf-item';
+    item.innerHTML = `
+      <span class="lf-icon">💰</span>
+      <div class="lf-text">
+        <div class="lf-title">New sale recorded</div>
+        <div class="lf-sub">${customer} purchased ${prodName} (${qty}x)</div>
+      </div>
+      <span class="lf-val">+₹${saleRevenue.toLocaleString('en-IN')}</span>
+    `;
+    feed.insertBefore(item, feed.firstChild);
+  }
+
+  // 5. Insert Record to Supabase Database if available
+  if (supabaseClient) {
+    try {
+      await supabaseClient.from('sales').insert({
+        revenue: saleRevenue,
+        profit: saleProfit,
+        region: region
+      });
+      console.log('⚡ Sale recorded in Supabase!');
+    } catch (err) {
+      console.warn('Supabase sale insert notice:', err);
+    }
+  }
+
+  closeAddSaleModal();
+  alert(`✨ Sale Recorded Successfully!\nRevenue: +₹${saleRevenue.toLocaleString('en-IN')}\nDashboard metrics updated live.`);
+};
+
+// ─── CHARTS ───────────────────────────────────────
 function normalizePoints(data, w, h, padding = 10) {
   const min = Math.min(...data);
   const max = Math.max(...data);
@@ -334,7 +398,6 @@ function normalizePoints(data, w, h, padding = 10) {
   }));
 }
 
-// ─── Hero Revenue Chart (₹ Lakhs) ──────────────────
 function initHeroChart() {
   const canvas = $('#hero-chart');
   if (!canvas) return;
@@ -430,7 +493,6 @@ function initHeroChart() {
   window.addEventListener('resize', () => draw(currentKey));
 }
 
-// ─── Hero Donut Chart ──────────────────────────────
 function initHeroDonut() {
   const canvas = $('#hero-donut');
   if (!canvas) return;
@@ -483,7 +545,6 @@ function initHeroDonut() {
   ctx.fillText('MoM', cx, cy + 10);
 }
 
-// ─── Analytics Feature Chart ───────────────────────
 function initFeatureChart() {
   const canvas = $('#fc-chart-1');
   if (!canvas) return;
@@ -520,7 +581,6 @@ function initFeatureChart() {
   window.addEventListener('resize', render);
 }
 
-// ─── Metrics Sparkline ──────────────────────────────
 function initMetricsSparkline() {
   const canvas = $('#metrics-sparkline');
   if (!canvas) return;
@@ -560,7 +620,6 @@ function initMetricsSparkline() {
   window.addEventListener('resize', render);
 }
 
-// ─── Live Feed Generator (Rupees ₹) ────────────────
 function initLiveFeed() {
   const feed = $('#live-feed');
   if (!feed) return;
@@ -589,11 +648,10 @@ function initLiveFeed() {
     if (feed.children.length > 5) feed.removeChild(feed.lastChild);
   }
 
-  for (let i = 0; i < 4; i++) addItem();
-  setInterval(addItem, 3500);
+  for (let i = 0; i < 3; i++) addItem();
 }
 
-// ─── Init ──────────────────────────────────────────
+// ─── INIT ──────────────────────────────────────────
 function init() {
   initSupabase();
   initAuth();
@@ -602,7 +660,7 @@ function init() {
   initLiveFeed();
 
   console.log(
-    '%c✦ Lumora Analytics (Supabase Connected: lumora) Initialized',
+    '%c✦ Lumora Analytics Engine (Colorlib Login & Revenue Calculator) Initialized',
     'color:#2ECC71;font-size:14px;font-weight:700;'
   );
 }

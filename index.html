@@ -21,118 +21,109 @@
     <div class="noise-overlay"></div>
   </div>
 
-  <!-- ══════════════════ LOGIN / CREATE ACCOUNT SCREEN ══════════════════ -->
+  <!-- ══════════════════ LOGIN / SIGN UP SCREEN (COLORLIB AESTHETIC) ══════════════════ -->
   <div class="login-screen" id="login-screen">
-    <div class="login-card">
-      <div class="login-logo">
-        <div class="logo-mark">
-          <svg width="36" height="36" viewBox="0 0 28 28" fill="none">
-            <circle cx="14" cy="14" r="13" stroke="#2ECC71" stroke-width="1.5" fill="none" opacity="0.3"/>
-            <circle cx="14" cy="14" r="7" fill="#2ECC71" opacity="0.15"/>
-            <path d="M7 17 L11 11 L15 14 L19 8 L21 10" stroke="#2ECC71" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <circle cx="21" cy="10" r="2" fill="#2ECC71"/>
-          </svg>
-        </div>
-        <span class="logo-wordmark">Lumora<span class="logo-suffix"> Analytics</span></span>
-      </div>
-
-      <!-- AUTH TABS: SIGN IN vs CREATE ACCOUNT -->
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tab-signin-btn" onclick="switchAuthTab('signin')">Sign In</button>
-        <button class="auth-tab" id="tab-signup-btn" onclick="switchAuthTab('signup')">Create Account</button>
-      </div>
-
+    <div class="colorlib-login-card">
+      
       <!-- 1. SIGN IN CONTAINER -->
       <div class="auth-container" id="auth-signin-container">
-        <div class="login-header">
-          <h2>Welcome back</h2>
-          <p>Sign in to your Lumora Analytics account</p>
-        </div>
+        <h2 class="cl-title">Login</h2>
 
-        <form class="login-form" id="login-form">
-          <div class="form-group">
-            <label for="login-email">Work Email</label>
-            <input type="email" id="login-email" value="sarah.chen@lumora.ai" placeholder="name@company.com" required />
-          </div>
-
-          <div class="form-group">
-            <div class="label-row">
-              <label for="login-password">Password</label>
-              <a href="#" class="forgot-link" onclick="alert('Password reset link sent to email.')">Forgot?</a>
+        <form class="cl-form" id="login-form">
+          <div class="cl-field">
+            <label class="cl-label">Username / Email</label>
+            <div class="cl-input-wrap">
+              <span class="cl-icon">👤</span>
+              <input type="email" id="login-email" value="sarah.chen@lumora.ai" placeholder="Type your username" required />
             </div>
-            <input type="password" id="login-password" value="password123" required />
           </div>
 
-          <button type="submit" class="btn-login-submit" id="btn-login">
-            Sign In
+          <div class="cl-field">
+            <label class="cl-label">Password</label>
+            <div class="cl-input-wrap">
+              <span class="cl-icon">🔒</span>
+              <input type="password" id="login-password" value="password123" placeholder="Type your password" required />
+            </div>
+            <div class="cl-forgot-row">
+              <a href="#" onclick="alert('Password reset link sent.')">Forgot password?</a>
+            </div>
+          </div>
+
+          <button type="submit" class="cl-btn-gradient" id="btn-login">
+            LOGIN
           </button>
         </form>
 
-        <div class="login-footer">
-          <span>Don't have an account? <a href="#" onclick="switchAuthTab('signup')">Create Account</a></span>
+        <div class="cl-divider">Or Sign In Using Demo Profile</div>
+
+        <!-- DEMO SHORTCUT CHIPS -->
+        <div class="cl-demo-grid">
+          <button class="cl-demo-btn active" id="demo-admin-chip" onclick="quickDemoLogin('admin')">
+            <span class="cl-av">SC</span>
+            <span>Sarah Chen (Admin)</span>
+          </button>
+
+          <button class="cl-demo-btn" id="demo-manager-chip" onclick="quickDemoLogin('manager')">
+            <span class="cl-av mgr">AM</span>
+            <span>Alex Morgan (Manager)</span>
+          </button>
         </div>
 
-        <div class="demo-divider"><span>or sign in with demo profile</span></div>
-
-        <!-- QUICK DEMO PROFILES AT BOTTOM -->
-        <div class="demo-profiles-footer">
-          <button class="demo-chip active" id="demo-admin-chip" onclick="quickDemoLogin('admin')">
-            <span class="dc-avatar">SC</span>
-            <div class="dc-info">
-              <span class="dc-name">Sarah Chen</span>
-              <span class="dc-role">Admin</span>
-            </div>
-          </button>
-
-          <button class="demo-chip" id="demo-manager-chip" onclick="quickDemoLogin('manager')">
-            <span class="dc-avatar manager">AM</span>
-            <div class="dc-info">
-              <span class="dc-name">Alex Morgan</span>
-              <span class="dc-role">Manager</span>
-            </div>
-          </button>
+        <div class="cl-bottom-switch">
+          <span>Or Sign Up Using</span>
+          <button class="cl-switch-btn" onclick="switchAuthTab('signup')">SIGN UP</button>
         </div>
       </div>
 
       <!-- 2. CREATE ACCOUNT CONTAINER -->
       <div class="auth-container" id="auth-signup-container" style="display: none;">
-        <div class="login-header">
-          <h2>Create Account</h2>
-          <p>Get started with Lumora Business Analytics</p>
-        </div>
+        <h2 class="cl-title">Sign Up</h2>
 
-        <form class="login-form" id="signup-form">
-          <div class="form-group">
-            <label for="signup-name">Full Name</label>
-            <input type="text" id="signup-name" placeholder="Rohan Sharma" required />
+        <form class="cl-form" id="signup-form">
+          <div class="cl-field">
+            <label class="cl-label">Full Name</label>
+            <div class="cl-input-wrap">
+              <span class="cl-icon">👤</span>
+              <input type="text" id="signup-name" placeholder="Type your name" required />
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="signup-email">Work Email</label>
-            <input type="email" id="signup-email" placeholder="rohan@company.com" required />
+          <div class="cl-field">
+            <label class="cl-label">Work Email</label>
+            <div class="cl-input-wrap">
+              <span class="cl-icon">✉️</span>
+              <input type="email" id="signup-email" placeholder="Type your email" required />
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="signup-role">Role</label>
-            <select id="signup-role" class="form-select">
-              <option value="admin">Admin (Full Access)</option>
-              <option value="manager" selected>Sales Manager</option>
-              <option value="analyst">Data Analyst</option>
-            </select>
+          <div class="cl-field">
+            <label class="cl-label">Role</label>
+            <div class="cl-input-wrap">
+              <span class="cl-icon">💼</span>
+              <select id="signup-role" class="cl-select">
+                <option value="admin">Admin (Full Access)</option>
+                <option value="manager" selected>Sales Manager</option>
+                <option value="analyst">Data Analyst</option>
+              </select>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="signup-password">Password</label>
-            <input type="password" id="signup-password" placeholder="Minimum 8 characters" required />
+          <div class="cl-field">
+            <label class="cl-label">Password</label>
+            <div class="cl-input-wrap">
+              <span class="cl-icon">🔒</span>
+              <input type="password" id="signup-password" placeholder="Type password (min 8 chars)" required />
+            </div>
           </div>
 
-          <button type="submit" class="btn-login-submit">
-            Create Account & Sign In
+          <button type="submit" class="cl-btn-gradient">
+            CREATE ACCOUNT
           </button>
         </form>
 
-        <div class="login-footer" style="margin-top: 14px;">
-          <span>Already have an account? <a href="#" onclick="switchAuthTab('signin')">Sign In</a></span>
+        <div class="cl-bottom-switch">
+          <span>Already Have Account?</span>
+          <button class="cl-switch-btn" onclick="switchAuthTab('signin')">SIGN IN</button>
         </div>
       </div>
 
@@ -262,11 +253,16 @@
         </div>
 
         <div class="topbar-right">
+          <!-- ADD NEW SALE BUTTON TRIGGER -->
+          <button class="btn-add-sale" onclick="openAddSaleModal()">
+            <span>＋ Add New Sale</span>
+          </button>
+
           <div class="currency-chip">
             <span>₹ INR</span>
           </div>
 
-          <!-- NOTIFICATION BELL ICON (WITH WORKING DROPDOWN) -->
+          <!-- NOTIFICATION BELL ICON -->
           <div class="topbar-notif-wrap">
             <button class="topbar-icon-btn" id="topbar-bell" title="Notifications" aria-label="Notifications">
               🔔<span class="bell-badge" id="bell-count">3</span>
@@ -283,7 +279,7 @@
                   <span class="nd-icon">💰</span>
                   <div class="nd-text">
                     <div class="nd-item-title">Revenue Goal Reached</div>
-                    <div class="nd-item-sub">Monthly target of ₹50 Lakhs achieved!</div>
+                    <div class="nd-item-sub">Monthly target achieved!</div>
                     <div class="nd-time">10m ago</div>
                   </div>
                 </div>
@@ -293,14 +289,6 @@
                     <div class="nd-item-title">New Enterprise Client</div>
                     <div class="nd-item-sub">Mahindra Group signed annual plan</div>
                     <div class="nd-time">1h ago</div>
-                  </div>
-                </div>
-                <div class="nd-item unread" onclick="markItemRead(this)">
-                  <span class="nd-icon">🤖</span>
-                  <div class="nd-text">
-                    <div class="nd-item-title">AI Insight Alert</div>
-                    <div class="nd-item-sub">Demand spike forecast in Bengaluru</div>
-                    <div class="nd-time">2h ago</div>
                   </div>
                 </div>
               </div>
@@ -320,15 +308,15 @@
         <!-- ════════ VIEW 1: CLEAN SIMPLE DASHBOARD ════════ -->
         <section class="view-panel active" id="view-dashboard-panel">
           
-          <!-- 4 SIMPLE CLEAN KPI CARDS (RUPEE DATA) -->
+          <!-- 4 SIMPLE CLEAN KPI CARDS (CALCULATED LIVE FROM SALES) -->
           <div class="dash-kpi-grid-clean">
             <div class="dash-kpi-card" id="dk-mon-rev">
               <div class="dk-top">
                 <span class="dk-lbl">Monthly Revenue</span>
                 <span class="dk-badge up">↑ 24.8%</span>
               </div>
-              <div class="dk-val">₹50.0 Lakhs</div>
-              <div class="dk-sub">Target ₹45.0 Lakhs</div>
+              <div class="dk-val" id="kpi-val-revenue">₹50.0 Lakhs</div>
+              <div class="dk-sub">Calculated live from sales</div>
             </div>
 
             <div class="dash-kpi-card" id="dk-profit">
@@ -336,7 +324,7 @@
                 <span class="dk-lbl">Net Profit</span>
                 <span class="dk-badge up">↑ 14.5%</span>
               </div>
-              <div class="dk-val">₹18.5 Lakhs</div>
+              <div class="dk-val" id="kpi-val-profit">₹18.5 Lakhs</div>
               <div class="dk-sub">37% net margin</div>
             </div>
 
@@ -345,17 +333,17 @@
                 <span class="dk-lbl">Active Customers</span>
                 <span class="dk-badge up">↑ 12.0%</span>
               </div>
-              <div class="dk-val">4,500</div>
-              <div class="dk-sub">94% retention</div>
+              <div class="dk-val" id="kpi-val-customers">4,500</div>
+              <div class="dk-sub">94% retention rate</div>
             </div>
 
             <div class="dash-kpi-card" id="dk-cvr">
               <div class="dk-top">
-                <span class="dk-lbl">Conversion Rate</span>
-                <span class="dk-badge up">↑ 3.1%</span>
+                <span class="dk-lbl">Total Orders</span>
+                <span class="dk-badge up">↑ 9.3%</span>
               </div>
-              <div class="dk-val">12.5%</div>
-              <div class="dk-sub">Benchmark 10%</div>
+              <div class="dk-val" id="kpi-val-orders">1,420</div>
+              <div class="dk-sub">Live transactions count</div>
             </div>
           </div>
 
@@ -365,7 +353,7 @@
               <div class="panel-header">
                 <div>
                   <h3 class="panel-title">Revenue Growth (₹)</h3>
-                  <p class="panel-sub">Monthly trend in Indian Rupees (₹ Lakhs)</p>
+                  <p class="panel-sub">Calculated revenue trajectory</p>
                 </div>
                 <div class="dca-tabs">
                   <button class="dca-tab active" id="tab-dash-1m">1M</button>
@@ -476,9 +464,12 @@
 
         <!-- ════════ VIEW 3: SALES ════════ -->
         <section class="view-panel" id="view-sales-panel">
-          <div class="view-header">
-            <h2>Sales Pipeline (₹)</h2>
-            <p>Simple deal pipeline tracking.</p>
+          <div class="view-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h2>Sales Pipeline (₹)</h2>
+              <p>Deal pipeline tracking in Indian Rupees.</p>
+            </div>
+            <button class="btn-add-sale" onclick="openAddSaleModal()">＋ Add New Sale</button>
           </div>
 
           <div class="pipeline-grid">
@@ -505,21 +496,21 @@
         <section class="view-panel" id="view-customers-panel">
           <div class="view-header">
             <h2>Customer Directory</h2>
-            <p>Simple customer account summary.</p>
+            <p>Customer account summary.</p>
           </div>
 
           <div class="data-table-card">
-            <table class="custom-table">
+            <table class="custom-table" id="customers-table">
               <thead>
                 <tr>
                   <th>Customer</th>
                   <th>Company</th>
                   <th>Plan Tier</th>
-                  <th>Spend (₹)</th>
+                  <th>Total Spent (₹)</th>
                   <th>Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="customers-tbody">
                 <tr><td>Sarah Chen</td><td>Mahindra Group</td><td><span class="badge-tier">Enterprise</span></td><td>₹14.2 Lakhs</td><td><span class="badge-active">Active</span></td></tr>
                 <tr><td>Alex Morgan</td><td>Reliance Retail</td><td><span class="badge-tier">Enterprise</span></td><td>₹9.8 Lakhs</td><td><span class="badge-active">Active</span></td></tr>
                 <tr><td>Priya Nair</td><td>Infosys Tech</td><td><span class="badge-tier">Growth</span></td><td>₹4.2 Lakhs</td><td><span class="badge-active">Active</span></td></tr>
@@ -540,14 +531,14 @@
               <h3>Lumora Enterprise Suite</h3>
               <p class="pc-cat">Full Stack</p>
               <div class="pc-price-tag">₹4,99,999 / yr</div>
-              <div class="pc-stats"><span>Active Users: 480</span><span>Rev: ₹24 Lakhs</span></div>
+              <div class="pc-stats"><span>Active Users: 480</span><span id="prod-suite-rev">Rev: ₹24.0 Lakhs</span></div>
             </div>
             <div class="prod-card">
               <div class="pc-icon">📊</div>
               <h3>Lumora Pro Analytics</h3>
               <p class="pc-cat">Mid-Market</p>
               <div class="pc-price-tag">₹49,999 / yr</div>
-              <div class="pc-stats"><span>Active Users: 1,840</span><span>Rev: ₹16 Lakhs</span></div>
+              <div class="pc-stats"><span>Active Users: 1,840</span><span id="prod-pro-rev">Rev: ₹16.0 Lakhs</span></div>
             </div>
           </div>
         </section>
@@ -559,11 +550,11 @@
           </div>
 
           <div class="data-table-card">
-            <table class="custom-table">
+            <table class="custom-table" id="orders-table">
               <thead>
                 <tr><th>Order ID</th><th>Customer</th><th>Date</th><th>Amount (₹)</th><th>Status</th></tr>
               </thead>
-              <tbody>
+              <tbody id="orders-tbody">
                 <tr><td>#ORD-9842</td><td>Mahindra Group</td><td>Today, 14:22</td><td>₹2,40,000</td><td><span class="badge-active">Completed</span></td></tr>
                 <tr><td>#ORD-9841</td><td>Tata Digital</td><td>Today, 13:45</td><td>₹98,000</td><td><span class="badge-active">Completed</span></td></tr>
               </tbody>
@@ -578,8 +569,8 @@
           </div>
 
           <div class="dash-kpi-grid-clean">
-            <div class="dash-kpi-card"><div class="dk-lbl">Monthly Revenue</div><div class="dk-val">₹50.0 Lakhs</div></div>
-            <div class="dash-kpi-card"><div class="dk-lbl">Annual Revenue</div><div class="dk-val">₹6.0 Crores</div></div>
+            <div class="dash-kpi-card"><div class="dk-lbl">Monthly Revenue</div><div class="dk-val" id="rev-view-mrr">₹50.0 Lakhs</div></div>
+            <div class="dash-kpi-card"><div class="dk-lbl">Annualized Revenue</div><div class="dk-val" id="rev-view-arr">₹6.0 Crores</div></div>
           </div>
         </section>
 
@@ -696,6 +687,58 @@
 
       </div>
     </main>
+  </div>
+
+  <!-- ══════════════════ MODAL: ADD NEW SALE & CALCULATE REVENUE ══════════════════ -->
+  <div class="modal-overlay" id="add-sale-modal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>＋ Record New Sale & Calculate Revenue</h3>
+        <button class="modal-close" onclick="closeAddSaleModal()">✕</button>
+      </div>
+
+      <form id="add-sale-form" onsubmit="handleCreateSale(event)">
+        <div class="form-group">
+          <label>Customer / Client Name</label>
+          <input type="text" id="sale-customer" placeholder="e.g. Tata Digital" required />
+        </div>
+
+        <div class="form-group">
+          <label>Product Purchased</label>
+          <select id="sale-product" class="form-select" onchange="recalculateSaleTotal()" required>
+            <option value="499999" data-name="Lumora Enterprise Suite">Lumora Enterprise Suite (₹4,99,999)</option>
+            <option value="49999" data-name="Lumora Pro Analytics">Lumora Pro Analytics (₹49,999)</option>
+            <option value="19999" data-name="API Connector">API Connector (₹19,999)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" id="sale-qty" value="1" min="1" oninput="recalculateSaleTotal()" required />
+        </div>
+
+        <div class="form-group">
+          <label>Region</label>
+          <select id="sale-region" class="form-select">
+            <option value="Mumbai">Mumbai (MH)</option>
+            <option value="Bengaluru" selected>Bengaluru (KA)</option>
+            <option value="Delhi NCR">Delhi NCR</option>
+            <option value="Hyderabad">Hyderabad (TS)</option>
+          </select>
+        </div>
+
+        <!-- LIVE CALCULATED SUMMARY -->
+        <div class="calc-summary-box">
+          <div class="cs-row"><span>Calculated Revenue:</span><strong id="calc-rev-val">₹4,99,999</strong></div>
+          <div class="cs-row"><span>Calculated Net Profit (37%):</span><strong id="calc-profit-val" style="color:#4ADE80">₹1,84,999</strong></div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-hero-secondary" onclick="closeAddSaleModal()">Cancel</button>
+          <button type="submit" class="btn-hero-primary">Add Sale & Recalculate Metrics</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script src="app.js"></script>
