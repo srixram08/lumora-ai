@@ -549,12 +549,13 @@ body {
   position: relative;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .dash-preview {
   position: relative;
   width: 100%;
-  max-width: 540px;
+  max-width: 520px;
 }
 
 .dash-window {
@@ -567,6 +568,8 @@ body {
     inset 0 1px 0 rgba(255,255,255,0.04);
   overflow: hidden;
   animation: dashFloat 8s ease-in-out infinite;
+  height: auto;
+  align-self: flex-start;
 }
 
 @keyframes dashFloat {
@@ -608,6 +611,23 @@ body {
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+/* Explicit Canvas Sizing */
+canvas {
+  display: block;
+}
+
+#hero-chart {
+  width: 100%;
+  height: 160px;
+  display: block;
+}
+
+#hero-donut {
+  width: 100px;
+  height: 100px;
+  display: block;
 }
 
 /* KPI Cards */

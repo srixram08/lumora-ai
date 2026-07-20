@@ -135,8 +135,9 @@ function initHeroChart() {
   function draw(key, prog) {
     const data = datasets[key];
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || canvas.width;
-    const h = canvas.clientHeight || canvas.height;
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width || canvas.clientWidth || 480;
+    const h = 160;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.scale(dpr, dpr);
@@ -322,8 +323,9 @@ function drawSparkline(containerId, data, color = '#2ECC71') {
   container.appendChild(canvas);
 
   function render() {
-    const w = container.clientWidth || 80;
-    const h = container.clientHeight || 32;
+    const rect = container.getBoundingClientRect();
+    const w = rect.width || container.clientWidth || 80;
+    const h = 32;
     const dpr = window.devicePixelRatio || 1;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
@@ -390,8 +392,9 @@ function initFeatureChart() {
   const data = [120, 145, 132, 168, 155, 189, 175, 210, 195, 235, 220, 260];
 
   function render() {
-    const w = canvas.clientWidth || canvas.width;
-    const h = canvas.clientHeight || canvas.height;
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width || canvas.clientWidth || 300;
+    const h = 100;
     const dpr = window.devicePixelRatio || 1;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
@@ -459,8 +462,9 @@ function initMetricsSparkline() {
   }
 
   function render() {
-    const w = canvas.clientWidth || canvas.width;
-    const h = canvas.clientHeight || canvas.height;
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width || canvas.clientWidth || 380;
+    const h = 100;
     const dpr = window.devicePixelRatio || 1;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
