@@ -1,6 +1,7 @@
 /* ══════════════════════════════════════════════════
    LUMORA ANALYTICS — Application JavaScript
-   Modern Business Analytics Dashboard System
+   Currency: Rupee (₹)
+   Login System + Simple Clean Dashboard
    ══════════════════════════════════════════════════ */
 
 'use strict';
@@ -8,19 +9,53 @@
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
+// ─── Login & Auth Handler ──────────────────────────
+function initAuth() {
+  const loginForm = $('#login-form');
+  const loginScreen = $('#login-screen');
+  const appLayout = $('#app-layout');
+
+  loginForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    doLogin();
+  });
+
+  window.demoLogin = function() {
+    doLogin();
+  };
+
+  window.logout = function() {
+    if (confirm('Are you sure you want to log out of Lumora Analytics?')) {
+      appLayout.style.display = 'none';
+      loginScreen.style.display = 'flex';
+    }
+  };
+
+  function doLogin() {
+    loginScreen.style.display = 'none';
+    appLayout.style.display = 'flex';
+    
+    // Initialize charts upon entering dashboard
+    setTimeout(() => {
+      initHeroChart();
+      initHeroDonut();
+    }, 100);
+  }
+}
+
 // ─── View Titles Mapping ───────────────────────────
 const ViewTitles = {
-  'dashboard': 'Dashboard',
-  'analytics': 'Sales & Revenue Analytics',
-  'sales': 'Sales Management & Pipeline',
-  'customers': 'Customer Directory & Retention',
-  'products': 'Products & Inventory Performance',
-  'orders': 'Orders & Real-time Transactions',
-  'revenue': 'Revenue & Financial Breakdown',
+  'dashboard': 'Dashboard Overview',
+  'analytics': 'Sales & Revenue Analytics (₹)',
+  'sales': 'Sales Pipeline (₹)',
+  'customers': 'Customer Directory',
+  'products': 'Products & Pricing (₹)',
+  'orders': 'Orders & Transactions (₹)',
+  'revenue': 'Revenue Breakdown (₹)',
   'ai-insights': '🤖 Lumora AI Intelligence',
-  'forecast': '📅 Financial & Growth Forecast',
+  'forecast': '📅 Financial Forecast (₹)',
   'reports': '📄 Automated Business Reports',
-  'notifications': '🔔 System Notifications & Alerts',
+  'notifications': '🔔 System Notifications',
   'settings': '⚙️ System Settings',
   'profile': '👤 User Profile',
 };
@@ -56,7 +91,7 @@ function initNavigation() {
       // Close mobile sidebar if open
       sidebar?.classList.remove('open');
 
-      // Trigger chart re-render if switching to dashboard or analytics
+      // Trigger chart re-render
       setTimeout(() => {
         if (targetView === 'dashboard') {
           initHeroChart();
@@ -70,16 +105,14 @@ function initNavigation() {
     });
   });
 
-  // Sidebar toggle for smaller screens
+  // Sidebar toggle
   sidebarToggle?.addEventListener('click', () => {
     sidebar?.classList.toggle('open');
   });
 
-  // Logout button demo
+  // Logout button in sidebar
   $('#nav-logout')?.addEventListener('click', () => {
-    if (confirm('Are you sure you want to log out of Lumora Analytics?')) {
-      alert('You have been logged out.');
-    }
+    window.logout();
   });
 }
 
@@ -94,16 +127,16 @@ function normalizePoints(data, w, h, padding = 10) {
   }));
 }
 
-// ─── Hero Revenue Chart ────────────────────────────
+// ─── Hero Revenue Chart (₹ Cr) ─────────────────────
 function initHeroChart() {
   const canvas = $('#hero-chart');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
   const datasets = {
-    '1M': [320, 380, 340, 420, 390, 460, 440, 520, 490, 580, 560, 640, 610, 700, 680, 760, 740, 820],
-    '3M': [200, 240, 220, 280, 310, 290, 360, 340, 400, 380, 450, 420, 500, 480, 560, 530, 610, 580, 660, 640, 720],
-    '1Y': [100, 130, 120, 160, 150, 190, 180, 230, 220, 280, 270, 340, 320, 400, 390, 470, 450, 540, 520, 610, 590, 680, 660, 750],
+    '1M': [32, 38, 34, 42, 39, 46, 44, 52, 49, 58, 56, 64, 61, 70, 68, 76, 74, 82],
+    '3M': [20, 24, 22, 28, 31, 29, 36, 34, 40, 38, 45, 42, 50, 48, 56, 53, 61, 58, 66, 64, 72],
+    '1Y': [10, 13, 12, 16, 15, 19, 18, 23, 22, 28, 27, 34, 32, 40, 39, 47, 45, 54, 52, 61, 59, 68, 66, 75],
   };
 
   let currentKey = '1M';
@@ -113,7 +146,7 @@ function initHeroChart() {
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
     const w = rect.width || 600;
-    const h = 200;
+    const h = 220;
 
     canvas.width = w * dpr;
     canvas.height = h * dpr;
@@ -249,17 +282,17 @@ function initHeroDonut() {
   ctx.fillText('MoM', cx, cy + 10);
 }
 
-// ─── Analytics Feature Chart ───────────────────────
+// ─── Analytics Feature Chart (₹ Cr) ────────────────
 function initFeatureChart() {
   const canvas = $('#fc-chart-1');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const data = [120, 145, 132, 168, 155, 189, 175, 210, 195, 235, 220, 260];
+  const data = [12, 14.5, 13.2, 16.8, 15.5, 18.9, 17.5, 21.0, 19.5, 23.5, 22.0, 26.0];
 
   function render() {
     const rect = canvas.getBoundingClientRect();
     const w = rect.width || 500;
-    const h = 180;
+    const h = 200;
     const dpr = window.devicePixelRatio || 1;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
@@ -287,7 +320,7 @@ function initFeatureChart() {
   window.addEventListener('resize', render);
 }
 
-// ─── Metrics Sparkline (Forecast) ──────────────────
+// ─── Metrics Sparkline ──────────────────────────────
 function initMetricsSparkline() {
   const canvas = $('#metrics-sparkline');
   if (!canvas) return;
@@ -300,7 +333,7 @@ function initMetricsSparkline() {
   function render() {
     const rect = canvas.getBoundingClientRect();
     const w = rect.width || 700;
-    const h = 160;
+    const h = 180;
     const dpr = window.devicePixelRatio || 1;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
@@ -327,18 +360,18 @@ function initMetricsSparkline() {
   window.addEventListener('resize', render);
 }
 
-// ─── Live Feed Generator ───────────────────────────
+// ─── Live Feed Generator (Rupees ₹) ────────────────
 function initLiveFeed() {
   const feed = $('#live-feed');
   if (!feed) return;
 
   const events = [
-    { icon: '💰', title: 'New sale recorded', detail: 'Meridian Corp purchased Enterprise Suite', val: '+$4,999' },
-    { icon: '👤', title: 'New customer onboarding', detail: 'Sarah Chen registered 12 seats', val: '+12 Users' },
-    { icon: '📈', title: 'Revenue milestone', detail: 'Monthly target reached 105%', val: '$8.42M' },
-    { icon: '⭐', title: '5-Star CSAT Review', detail: 'Claravox LLC rated Lumora 5/5', val: '5.0 ★' },
-    { icon: '🤖', title: 'AI Insight Alert', detail: 'High demand forecast for Q4', val: '+18% Proj' },
-    { icon: '📦', title: 'Renewal completed', detail: 'Novaris Corp renewed annual license', val: '+$42,100' },
+    { icon: '💰', title: 'New sale recorded', detail: 'Mahindra Group purchased Enterprise Suite', val: '+₹4,99,999' },
+    { icon: '👤', title: 'New enterprise user', detail: 'Sarah Chen added 12 new team seats', val: '+12 Seats' },
+    { icon: '📈', title: 'Revenue milestone', detail: 'Monthly target reached ₹69.8 Cr', val: '₹69.8 Cr' },
+    { icon: '⭐', title: '5-Star Review', detail: 'Reliance Retail rated Lumora 5/5', val: '5.0 ★' },
+    { icon: '🤖', title: 'AI Insight Alert', detail: 'High demand forecast for Bengaluru cluster', val: '+34% Proj' },
+    { icon: '📦', title: 'License Renewal', detail: 'Infosys Labs renewed annual contract', val: '+₹42,10,000' },
   ];
 
   function addItem() {
@@ -363,13 +396,12 @@ function initLiveFeed() {
 
 // ─── Init ──────────────────────────────────────────
 function init() {
+  initAuth();
   initNavigation();
-  initHeroChart();
-  initHeroDonut();
   initLiveFeed();
 
   console.log(
-    '%c✦ Lumora Analytics Dashboard App Initialized',
+    '%c✦ Lumora Analytics (₹ INR) Dashboard Initialized',
     'color:#2ECC71;font-size:14px;font-weight:700;'
   );
 }
