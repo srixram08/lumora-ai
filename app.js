@@ -86,11 +86,31 @@ function initAuth() {
     const submitBtn = $('#btn-login');
 
     if (emailInput) emailInput.value = Profiles[roleKey].email;
-    if (submitBtn) submitBtn.textContent = `Sign In as ${roleKey === 'admin' ? 'Admin' : 'Manager'}`;
+    if (submitBtn) submitBtn.textContent = `Sign In as ${Profiles[roleKey].name} (${roleKey === 'admin' ? 'Admin' : 'Manager'})`;
   };
 
-  loginForm?.addEventListener('submit', (e) => {
+  loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const emailVal = $('#login-email')?.value;
+    const passVal = $('#login-password')?.value;
+
+    // Try Supabase Auth if available
+    if (supabaseClient && supabaseClient.auth) {
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email: emailVal,
+          password: passVal
+        });
+        if (error) {
+          console.log('Supabase Auth notice (using profile session):', error.message);
+        } else if (data?.user) {
+          console.log('⚡ Supabase Auth User Logged In:', data.user.email);
+        }
+      } catch (err) {
+        console.warn('Auth fallback:', err);
+      }
+    }
+
     doLogin(currentRole);
   });
 
