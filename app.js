@@ -69,9 +69,54 @@ let unreadNotifications = 3;
 
 // ─── Two-Login Selection & Auth ────────────────────
 function initAuth() {
-  const loginForm = $('#login-form');
-  const loginScreen = $('#login-screen');
-  const appLayout = $('#app-layout');
+  // Auth Tab Switcher
+  window.switchAuthTab = function(tabKey) {
+    const signinTab = $('#tab-signin-btn');
+    const signupTab = $('#tab-signup-btn');
+    const signinContainer = $('#auth-signin-container');
+    const signupContainer = $('#auth-signup-container');
+
+    if (tabKey === 'signup') {
+      signinTab?.classList.remove('active');
+      signupTab?.classList.add('active');
+      if (signinContainer) signinContainer.style.display = 'none';
+      if (signupContainer) signupContainer.style.display = 'flex';
+    } else {
+      signupTab?.classList.remove('active');
+      signinTab?.classList.add('active');
+      if (signupContainer) signupContainer.style.display = 'none';
+      if (signinContainer) signinContainer.style.display = 'flex';
+    }
+  };
+
+  // Sign Up Form Submit
+  const signupForm = $('#signup-form');
+  signupForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = $('#signup-name')?.value || 'New User';
+    const email = $('#signup-email')?.value || 'user@lumora.ai';
+    const roleKey = $('#signup-role')?.value || 'manager';
+    const password = $('#signup-password')?.value;
+
+    // Create user object for dynamic profile session
+    Profiles['custom'] = {
+      email,
+      name,
+      role: roleKey === 'admin' ? 'VP of Operations' : roleKey === 'manager' ? 'Sales Manager' : 'Data Analyst',
+      initials: name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'NU',
+      badgeText: 'New User'
+    };
+
+    if (supabaseClient && supabaseClient.auth) {
+      try {
+        await supabaseClient.auth.signUp({ email, password });
+      } catch (err) {
+        console.warn('Supabase Auth SignUp notice:', err);
+      }
+    }
+
+    doLogin('custom');
+  });
 
   window.selectRole = function(roleKey) {
     if (!Profiles[roleKey]) return;

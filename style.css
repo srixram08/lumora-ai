@@ -87,13 +87,66 @@ html, body {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
-  padding: 36px;
+  padding: 32px 36px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
   box-shadow: var(--shadow-lg), 0 0 40px rgba(46,204,113,0.06);
   backdrop-filter: blur(20px);
   animation: loginAppear 0.4s ease-out;
+}
+
+/* AUTH TABS */
+.auth-tabs {
+  display: flex;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  gap: 4px;
+}
+
+.auth-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.auth-tab.active {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-select {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.form-select option {
+  background: var(--card);
+  color: var(--text);
 }
 
 @keyframes loginAppear {
