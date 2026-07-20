@@ -173,11 +173,84 @@ html, body {
   margin-top: 2px;
 }
 
-/* TWO LOGINS SELECTOR GRID */
-.two-login-grid {
+.demo-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-3);
+  font-size: 11px;
+  margin: 4px 0 2px;
+}
+
+.demo-divider::before, .demo-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-2);
+}
+
+.demo-divider span {
+  padding: 0 10px;
+}
+
+.demo-profiles-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.demo-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+
+.demo-chip:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(46,204,113,0.3);
+}
+
+.demo-chip.active {
+  border-color: var(--green);
+  background: rgba(46,204,113,0.08);
+}
+
+.dc-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--green), #06b6d4);
+  color: #0a1f14;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.dc-avatar.manager {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+}
+
+.dc-info {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+}
+
+.dc-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dc-role {
+  font-size: 10px;
+  color: var(--text-3);
 }
 
 .role-card {

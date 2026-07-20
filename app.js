@@ -118,20 +118,19 @@ function initAuth() {
     doLogin('custom');
   });
 
-  window.selectRole = function(roleKey) {
+  window.quickDemoLogin = function(roleKey) {
     if (!Profiles[roleKey]) return;
     currentRole = roleKey;
 
-    // Toggle active role card UI
-    $('#role-admin-btn')?.classList.toggle('active', roleKey === 'admin');
-    $('#role-manager-btn')?.classList.toggle('active', roleKey === 'manager');
+    // Toggle demo chip UI
+    $('#demo-admin-chip')?.classList.toggle('active', roleKey === 'admin');
+    $('#demo-manager-chip')?.classList.toggle('active', roleKey === 'manager');
 
-    // Set email input & button label
+    // Fill form and log in immediately
     const emailInput = $('#login-email');
-    const submitBtn = $('#btn-login');
-
     if (emailInput) emailInput.value = Profiles[roleKey].email;
-    if (submitBtn) submitBtn.textContent = `Sign In as ${Profiles[roleKey].name} (${roleKey === 'admin' ? 'Admin' : 'Manager'})`;
+
+    doLogin(roleKey);
   };
 
   loginForm?.addEventListener('submit', async (e) => {

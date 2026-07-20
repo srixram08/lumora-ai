@@ -46,34 +46,13 @@
       <div class="auth-container" id="auth-signin-container">
         <div class="login-header">
           <h2>Welcome back</h2>
-          <p>Select a user account or enter credentials</p>
-        </div>
-
-        <!-- TWO USER PROFILES -->
-        <div class="two-login-grid">
-          <button class="role-card active" id="role-admin-btn" onclick="selectRole('admin')">
-            <div class="rc-avatar">SC</div>
-            <div class="rc-info">
-              <div class="rc-title">Sarah Chen <span class="badge-role-admin">Admin</span></div>
-              <div class="rc-sub">sarah.chen@lumora.ai • VP Operations</div>
-            </div>
-            <span class="rc-check">✓</span>
-          </button>
-
-          <button class="role-card" id="role-manager-btn" onclick="selectRole('manager')">
-            <div class="rc-avatar manager">AM</div>
-            <div class="rc-info">
-              <div class="rc-title">Alex Morgan <span class="badge-role-mgr">Manager</span></div>
-              <div class="rc-sub">alex.morgan@lumora.ai • Sales Manager</div>
-            </div>
-            <span class="rc-check">✓</span>
-          </button>
+          <p>Sign in to your Lumora Analytics account</p>
         </div>
 
         <form class="login-form" id="login-form">
           <div class="form-group">
-            <label for="login-email">User Email</label>
-            <input type="email" id="login-email" value="sarah.chen@lumora.ai" required />
+            <label for="login-email">Work Email</label>
+            <input type="email" id="login-email" value="sarah.chen@lumora.ai" placeholder="name@company.com" required />
           </div>
 
           <div class="form-group">
@@ -85,12 +64,33 @@
           </div>
 
           <button type="submit" class="btn-login-submit" id="btn-login">
-            Sign In as Sarah Chen (Admin)
+            Sign In
           </button>
         </form>
 
-        <div class="login-footer" style="margin-top: 14px;">
+        <div class="login-footer">
           <span>Don't have an account? <a href="#" onclick="switchAuthTab('signup')">Create Account</a></span>
+        </div>
+
+        <div class="demo-divider"><span>or sign in with demo profile</span></div>
+
+        <!-- QUICK DEMO PROFILES AT BOTTOM -->
+        <div class="demo-profiles-footer">
+          <button class="demo-chip active" id="demo-admin-chip" onclick="quickDemoLogin('admin')">
+            <span class="dc-avatar">SC</span>
+            <div class="dc-info">
+              <span class="dc-name">Sarah Chen</span>
+              <span class="dc-role">Admin</span>
+            </div>
+          </button>
+
+          <button class="demo-chip" id="demo-manager-chip" onclick="quickDemoLogin('manager')">
+            <span class="dc-avatar manager">AM</span>
+            <div class="dc-info">
+              <span class="dc-name">Alex Morgan</span>
+              <span class="dc-role">Manager</span>
+            </div>
+          </button>
         </div>
       </div>
 
