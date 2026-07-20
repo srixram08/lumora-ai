@@ -69,7 +69,7 @@ html, body {
   opacity: 0.3;
 }
 
-/* ─── COLORLIB AESTHETIC LOGIN CARD ──────────────── */
+/* ─── COLORLIB AESTHETIC LOGIN CARD (DARK DASHBOARD THEME) ─── */
 .login-screen {
   position: fixed;
   inset: 0;
@@ -78,18 +78,28 @@ html, body {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #0f2027 100%);
+  background: var(--bg);
 }
 
 .colorlib-login-card {
   width: 100%;
   max-width: 420px;
-  background: #ffffff;
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: var(--radius-xl);
-  padding: 44px 40px;
-  color: #333333;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  padding: 36px 36px 40px;
+  color: var(--text);
+  box-shadow: var(--shadow-lg), 0 0 50px rgba(46, 204, 113, 0.08);
+  backdrop-filter: blur(20px);
   animation: loginAppear 0.4s ease-out;
+}
+
+.cl-brand-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 @keyframes loginAppear {
@@ -98,11 +108,11 @@ html, body {
 }
 
 .cl-title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 800;
-  color: #222222;
+  color: var(--text);
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   letter-spacing: -0.5px;
 }
 
@@ -121,25 +131,26 @@ html, body {
 .cl-label {
   font-size: 12px;
   font-weight: 600;
-  color: #666666;
+  color: var(--text-2);
 }
 
 .cl-input-wrap {
   display: flex;
   align-items: center;
   gap: 10px;
-  border-bottom: 2px solid #e6e6e6;
+  border-bottom: 2px solid var(--border-2);
   padding-bottom: 8px;
   transition: var(--transition);
 }
 
 .cl-input-wrap:focus-within {
-  border-bottom-color: #00c6ff;
+  border-bottom-color: var(--green);
+  box-shadow: 0 2px 10px rgba(46,204,113,0.15);
 }
 
 .cl-icon {
   font-size: 15px;
-  color: #888888;
+  color: var(--text-3);
 }
 
 .cl-input-wrap input {
@@ -148,17 +159,18 @@ html, body {
   outline: none;
   font-family: inherit;
   font-size: 14px;
-  color: #333333;
+  color: var(--text);
   background: none;
 }
 
 .cl-input-wrap input::placeholder {
-  color: #bbbbbb;
+  color: var(--text-3);
 }
 
 .cl-select {
-  width: 100%; border: none; outline: none; font-family: inherit; font-size: 14px; color: #333333; background: none; cursor: pointer;
+  width: 100%; border: none; outline: none; font-family: inherit; font-size: 14px; color: var(--text); background: none; cursor: pointer;
 }
+.cl-select option { background: var(--card); color: var(--text); }
 
 .cl-forgot-row {
   text-align: right;
@@ -167,11 +179,11 @@ html, body {
 
 .cl-forgot-row a {
   font-size: 12px;
-  color: #888888;
+  color: var(--text-3);
   text-decoration: none;
 }
 
-.cl-forgot-row a:hover { color: #00c6ff; }
+.cl-forgot-row a:hover { color: var(--green); }
 
 .cl-btn-gradient {
   margin-top: 10px;
@@ -179,29 +191,29 @@ html, body {
   padding: 13px;
   border: none;
   border-radius: 100px;
-  background: linear-gradient(90deg, #00c6ff 0%, #0072ff 50%, #2ECC71 100%);
+  background: linear-gradient(90deg, var(--green) 0%, #06b6d4 50%, var(--green-light) 100%);
   background-size: 200% auto;
-  color: #ffffff;
+  color: #0a1f14;
   font-family: inherit;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 1px;
   cursor: pointer;
   transition: var(--transition);
-  box-shadow: 0 6px 20px rgba(0, 198, 255, 0.35);
+  box-shadow: 0 4px 20px rgba(46, 204, 113, 0.3);
 }
 
 .cl-btn-gradient:hover {
   background-position: right center;
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(0, 198, 255, 0.45);
+  box-shadow: 0 6px 24px rgba(46, 204, 113, 0.45);
 }
 
 .cl-divider {
   text-align: center;
   font-size: 11px;
-  color: #999999;
-  margin: 24px 0 14px;
+  color: var(--text-3);
+  margin: 22px 0 12px;
   font-weight: 500;
 }
 
@@ -215,26 +227,26 @@ html, body {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
-  background: #f7f9fc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  padding: 9px 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-md);
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
-  color: #475569;
+  color: var(--text-2);
   cursor: pointer;
   transition: var(--transition);
 }
 
 .cl-demo-btn:hover, .cl-demo-btn.active {
-  background: #f0fdf4;
-  border-color: #2ECC71;
-  color: #166534;
+  background: rgba(46,204,113,0.08);
+  border-color: var(--green);
+  color: var(--text);
 }
 
 .cl-av {
-  width: 24px; height: 24px; border-radius: 50%; background: #2ECC71; color: #0a1f14; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%; background: var(--green); color: #0a1f14; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center;
 }
 
 .cl-av.mgr { background: #3b82f6; color: white; }
@@ -242,15 +254,15 @@ html, body {
 .cl-bottom-switch {
   text-align: center;
   font-size: 12px;
-  color: #888888;
-  margin-top: 24px;
+  color: var(--text-3);
+  margin-top: 22px;
 }
 
 .cl-switch-btn {
-  background: none; border: none; font-family: inherit; font-size: 12px; font-weight: 800; color: #333333; cursor: pointer; margin-left: 6px; letter-spacing: 0.5px;
+  background: none; border: none; font-family: inherit; font-size: 12px; font-weight: 800; color: var(--green); cursor: pointer; margin-left: 6px; letter-spacing: 0.5px;
 }
 
-.cl-switch-btn:hover { color: #00c6ff; }
+.cl-switch-btn:hover { color: var(--green-light); text-decoration: underline; }
 
 /* ─── APP LAYOUT ────────────────────────────────── */
 .app-layout {
