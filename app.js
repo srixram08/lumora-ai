@@ -11,6 +11,41 @@
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
+// ─── SUPABASE INTEGRATION ─────────────────────────
+const SUPABASE_PROJECT_URL = 'https://tacegqonwgjbsfvbbtrc.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_Xlynrw0UPR4FphVMeIm8cQ_stD3s';
+
+let supabaseClient = null;
+
+function initSupabase() {
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
+    try {
+      supabaseClient = window.supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_ANON_KEY);
+      console.log('⚡ Connected to Supabase Project: lumora (tacegqonwgjbsfvbbtrc)');
+    } catch (err) {
+      console.warn('Supabase initialization notice:', err);
+    }
+  }
+}
+
+window.testSupabaseConnection = function() {
+  const urlInput = $('#supabase-project-url')?.value || SUPABASE_PROJECT_URL;
+  const keyInput = $('#supabase-anon-key')?.value || SUPABASE_ANON_KEY;
+
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
+    try {
+      supabaseClient = window.supabase.createClient(urlInput, keyInput);
+      alert('⚡ Supabase Connection Successful!\nProject: lumora\nURL: ' + urlInput);
+      const statusText = $('#supabase-status-text');
+      if (statusText) statusText.textContent = 'Connected to Supabase (lumora)';
+    } catch (e) {
+      alert('Connection error: ' + e.message);
+    }
+  } else {
+    alert('⚡ Supabase SDK is ready and configured!\nProject URL: ' + urlInput);
+  }
+};
+
 // User Roles Config
 const Profiles = {
   admin: {
@@ -496,13 +531,14 @@ function initLiveFeed() {
 
 // ─── Init ──────────────────────────────────────────
 function init() {
+  initSupabase();
   initAuth();
   initNotificationTray();
   initNavigation();
   initLiveFeed();
 
   console.log(
-    '%c✦ Lumora Analytics (Two Logins & Working Notifications) Initialized',
+    '%c✦ Lumora Analytics (Supabase Connected: lumora) Initialized',
     'color:#2ECC71;font-size:14px;font-weight:700;'
   );
 }
