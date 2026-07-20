@@ -314,7 +314,16 @@ html, body {
 .sidebar-divider { height: 1px; background: var(--border-2); margin: 4px 12px; }
 
 .sidebar-user-footer {
-  padding: 16px 20px; border-top: 1px solid var(--border-2); display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.2);
+  position: relative;
+  padding: 14px 16px; border-top: 1px solid var(--border-2); background: rgba(0,0,0,0.25);
+}
+
+.suf-user-wrap {
+  display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 6px 8px; border-radius: var(--radius-md); transition: var(--transition); width: 100%;
+}
+
+.suf-user-wrap:hover {
+  background: rgba(255,255,255,0.04);
 }
 
 .suf-avatar {
@@ -322,9 +331,56 @@ html, body {
 }
 
 .suf-text { flex: 1; min-width: 0; }
+.suf-name-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
 .suf-name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.suf-switch-arrow { font-size: 11px; color: var(--green); transition: var(--transition); }
 .suf-role { font-size: 11px; color: var(--text-3); }
-.suf-status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+.suf-status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); flex-shrink: 0; }
+
+/* ACCOUNT SWITCHER DROPDOWN POPOVER */
+.account-switch-menu {
+  display: none; position: absolute; bottom: 70px; left: 12px; width: 256px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 8px; box-shadow: var(--shadow-lg); z-index: 600; flex-direction: column; gap: 4px; animation: dropFade 0.2s ease-out;
+}
+
+.account-switch-menu.open { display: flex; }
+.asm-header { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.8px; padding: 6px 10px 4px; }
+
+.asm-item {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-md); background: none; border: 1px solid transparent; font-family: inherit; cursor: pointer; transition: var(--transition); text-align: left; width: 100%;
+}
+
+.asm-item:hover { background: rgba(255,255,255,0.04); border-color: var(--border-2); }
+.asm-item.active { background: rgba(46,204,113,0.08); border-color: rgba(46,204,113,0.3); }
+
+.asm-avatar {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--green); color: #0a1f14; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.asm-avatar.manager { background: #3b82f6; color: white; }
+
+.asm-info { flex: 1; display: flex; flex-direction: column; }
+.asm-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.asm-role { font-size: 10px; color: var(--text-3); }
+.asm-check { font-size: 12px; color: var(--green); font-weight: 700; }
+
+.asm-add { color: var(--green); font-size: 12px; font-weight: 600; }
+.asm-add-icon { font-size: 13px; }
+
+/* PROFILE VIEW LAYOUT */
+.profile-layout-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: start; }
+.prof-avatar-lg {
+  width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--green), #06b6d4); color: #0a1f14; font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+.prof-header-text h3 { font-size: 20px; font-weight: 700; color: var(--text); }
+.prof-header-text p { font-size: 13px; color: var(--text-2); margin-top: 2px; }
+.prof-badge-verified { font-size: 11px; font-weight: 600; color: var(--green-light); background: rgba(46,204,113,0.1); padding: 2px 8px; border-radius: 100px; border: 1px solid rgba(46,204,113,0.25); display: inline-block; margin-top: 6px; }
+
+.prof-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 8px; }
+.pd-item { display: flex; flex-direction: column; gap: 4px; }
+.pd-lbl { font-size: 11px; font-weight: 500; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; }
+.pd-item strong { font-size: 13px; color: var(--text); font-weight: 600; }
+
+.prof-actions-row { display: flex; gap: 12px; margin-top: 10px; }
 
 /* ─── MAIN CONTENT ───────────────────────────────── */
 .main-content {

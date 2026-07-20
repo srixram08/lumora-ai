@@ -235,14 +235,48 @@
         </div>
       </nav>
 
-      <!-- Sidebar User Footer -->
-      <div class="sidebar-user-footer">
-        <div class="suf-avatar" id="sidebar-user-avatar">SC</div>
-        <div class="suf-text">
-          <div class="suf-name" id="sidebar-user-name">Sarah Chen</div>
-          <div class="suf-role" id="sidebar-user-role">VP of Operations</div>
+      <!-- Sidebar User Footer with Account Switcher -->
+      <div class="sidebar-user-footer" id="sidebar-user-footer">
+        <div class="suf-user-wrap" id="suf-user-wrap" onclick="toggleAccountSwitcher(event)">
+          <div class="suf-avatar" id="sidebar-user-avatar">SC</div>
+          <div class="suf-text">
+            <div class="suf-name-row">
+              <span class="suf-name" id="sidebar-user-name">Sarah Chen</span>
+              <span class="suf-switch-arrow">▾</span>
+            </div>
+            <div class="suf-role" id="sidebar-user-role">VP of Operations</div>
+          </div>
+          <span class="suf-status-dot"></span>
         </div>
-        <span class="suf-status-dot"></span>
+
+        <!-- ACCOUNT SWITCHER DROPDOWN POPOVER -->
+        <div class="account-switch-menu" id="account-switch-menu">
+          <div class="asm-header">Switch Active Account</div>
+
+          <button class="asm-item active" id="asm-admin-btn" onclick="switchAccount('admin')">
+            <span class="asm-avatar">SC</span>
+            <div class="asm-info">
+              <span class="asm-name">Sarah Chen</span>
+              <span class="asm-role">VP Operations (Admin)</span>
+            </div>
+            <span class="asm-check">✓</span>
+          </button>
+
+          <button class="asm-item" id="asm-manager-btn" onclick="switchAccount('manager')">
+            <span class="asm-avatar manager">AM</span>
+            <div class="asm-info">
+              <span class="asm-name">Alex Morgan</span>
+              <span class="asm-role">Sales Manager</span>
+            </div>
+          </button>
+
+          <div class="sidebar-divider" style="margin: 6px 0;"></div>
+
+          <button class="asm-item asm-add" onclick="logout()">
+            <span class="asm-add-icon">🔑</span>
+            <span>Sign In to Another Account</span>
+          </button>
+        </div>
       </div>
     </aside>
 
@@ -678,21 +712,78 @@
           </div>
         </section>
 
-        <!-- ════════ VIEW 13: PROFILE ════════ -->
+        <!-- ════════ VIEW 13: PROFILE & ACCOUNT EDITING ════════ -->
         <section class="view-panel" id="view-profile-panel">
           <div class="view-header">
-            <h2>👤 User Profile</h2>
+            <h2>👤 User Profile & Account Settings</h2>
+            <p>View and edit your personal details and account information.</p>
           </div>
 
-          <div class="panel-card profile-card">
-            <div class="prof-header">
-              <div class="prof-avatar" id="profile-page-avatar">SC</div>
-              <div>
-                <h3 id="profile-page-name">Sarah Chen</h3>
-                <p id="profile-page-role">VP of Operations • Admin</p>
+          <div class="profile-layout-grid">
+            
+            <!-- PROFILE DETAILS CARD -->
+            <div class="panel-card profile-card-main">
+              <div class="prof-header">
+                <div class="prof-avatar-lg" id="profile-page-avatar">SC</div>
+                <div class="prof-header-text">
+                  <h3 id="profile-page-name">Sarah Chen</h3>
+                  <p id="profile-page-role">VP of Operations • Admin Account</p>
+                  <span class="prof-badge-verified">✓ Verified Active Account</span>
+                </div>
+              </div>
+
+              <div class="sidebar-divider"></div>
+
+              <div class="prof-details-grid">
+                <div class="pd-item"><span class="pd-lbl">Email Address</span><strong id="pd-val-email">sarah.chen@lumora.ai</strong></div>
+                <div class="pd-item"><span class="pd-lbl">Department</span><strong id="pd-val-dept">Operations & Strategy</strong></div>
+                <div class="pd-item"><span class="pd-lbl">Phone Number</span><strong id="pd-val-phone">+91 98765 43210</strong></div>
+                <div class="pd-item"><span class="pd-lbl">Workspace Role</span><strong id="pd-val-role">Admin (Full Access)</strong></div>
+                <div class="pd-item"><span class="pd-lbl">Location</span><strong>Mumbai, India (IST)</strong></div>
+                <div class="pd-item"><span class="pd-lbl">Member Since</span><strong>January 2024</strong></div>
+              </div>
+
+              <div class="prof-actions-row">
+                <button class="btn-hero-primary" onclick="toggleEditProfileForm()">✏️ Edit Profile Details</button>
+                <button class="btn-report btn-pdf" onclick="logout()">🚪 Logout</button>
               </div>
             </div>
-            <button class="btn-report btn-pdf" style="margin-top: 16px; width: fit-content;" onclick="logout()">Logout</button>
+
+            <!-- EDIT PROFILE FORM CARD -->
+            <div class="panel-card edit-profile-card" id="edit-profile-card">
+              <h3 class="panel-title">✏️ Edit Account Details</h3>
+              <p class="panel-sub">Update your personal profile and contact details.</p>
+
+              <form id="edit-profile-form" onsubmit="handleSaveProfile(event)">
+                <div class="form-group">
+                  <label for="edit-prof-name">Full Name</label>
+                  <input type="text" id="edit-prof-name" value="Sarah Chen" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="edit-prof-email">Email Address</label>
+                  <input type="email" id="edit-prof-email" value="sarah.chen@lumora.ai" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="edit-prof-role">Job Title / Role</label>
+                  <input type="text" id="edit-prof-role" value="VP of Operations" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="edit-prof-dept">Department</label>
+                  <input type="text" id="edit-prof-dept" value="Operations & Strategy" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="edit-prof-phone">Phone Number</label>
+                  <input type="text" id="edit-prof-phone" value="+91 98765 43210" required />
+                </div>
+
+                <button type="submit" class="btn-hero-primary" style="width: 100%;">Save Profile Changes</button>
+              </form>
+            </div>
+
           </div>
         </section>
 

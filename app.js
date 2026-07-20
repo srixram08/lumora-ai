@@ -145,7 +145,25 @@ function initAuth() {
     if (sbRoleEl) sbRoleEl.textContent = p.role;
     if (profAvatarEl) profAvatarEl.textContent = p.initials;
     if (profNameEl) profNameEl.textContent = p.name;
-    if (profRoleEl) profRoleEl.textContent = p.role;
+    if (profRoleEl) profRoleEl.textContent = `${p.role} • ${roleKey === 'admin' ? 'Admin' : 'Manager'}`;
+
+    // Update Profile View Fields
+    const pdEmail = $('#pd-val-email');
+    const pdRole = $('#pd-val-role');
+    if (pdEmail) pdEmail.textContent = p.email;
+    if (pdRole) pdRole.textContent = p.role;
+
+    // Update Edit Profile Inputs
+    const editName = $('#edit-prof-name');
+    const editEmail = $('#edit-prof-email');
+    const editRole = $('#edit-prof-role');
+    if (editName) editName.value = p.name;
+    if (editEmail) editEmail.value = p.email;
+    if (editRole) editRole.value = p.role;
+
+    // Update Account Switcher Active Check
+    $('#asm-admin-btn')?.classList.toggle('active', roleKey === 'admin');
+    $('#asm-manager-btn')?.classList.toggle('active', roleKey === 'manager');
 
     const ls = $('#login-screen');
     const al = $('#app-layout');
@@ -156,6 +174,84 @@ function initAuth() {
       initHeroChart();
       initHeroDonut();
     }, 100);
+  };
+
+  // ─── ACCOUNT SWITCHER DROPDOWN ON SIDEBAR BOTTOM LEFT ───
+  window.toggleAccountSwitcher = function(e) {
+    if (e) e.stopPropagation();
+    const menu = $('#account-switch-menu');
+    menu?.classList.toggle('open');
+  };
+
+  window.switchAccount = function(roleKey) {
+    currentRole = roleKey;
+    $('#account-switch-menu')?.classList.remove('open');
+    doLogin(roleKey);
+  };
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const menu = $('#account-switch-menu');
+    const wrap = $('#sidebar-user-footer');
+    if (menu && wrap && !wrap.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+
+  // ─── EDIT PROFILE DETAILS HANDLER ────────────────────────
+  window.toggleEditProfileForm = function() {
+    const card = $('#edit-profile-card');
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth' });
+      const nameInput = $('#edit-prof-name');
+      if (nameInput) nameInput.focus();
+    }
+  };
+
+  window.handleSaveProfile = function(event) {
+    event.preventDefault();
+    const newName = $('#edit-prof-name')?.value || 'User';
+    const newEmail = $('#edit-prof-email')?.value || 'user@lumora.ai';
+    const newRole = $('#edit-prof-role')?.value || 'VP of Operations';
+    const newDept = $('#edit-prof-dept')?.value || 'Operations';
+    const newPhone = $('#edit-prof-phone')?.value || '+91 98765 43210';
+
+    const initials = newName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'SC';
+
+    // Update current profile object
+    Profiles[currentRole] = {
+      ...Profiles[currentRole],
+      name: newName,
+      email: newEmail,
+      role: newRole,
+      initials: initials
+    };
+
+    // Update DOM
+    const userAvatarEl = $('#topbar-user-avatar');
+    const sbAvatarEl = $('#sidebar-user-avatar');
+    const sbNameEl = $('#sidebar-user-name');
+    const sbRoleEl = $('#sidebar-user-role');
+    const profAvatarEl = $('#profile-page-avatar');
+    const profNameEl = $('#profile-page-name');
+    const profRoleEl = $('#profile-page-role');
+
+    if (userAvatarEl) userAvatarEl.textContent = initials;
+    if (sbAvatarEl) sbAvatarEl.textContent = initials;
+    if (sbNameEl) sbNameEl.textContent = newName;
+    if (sbRoleEl) sbRoleEl.textContent = newRole;
+    if (profAvatarEl) profAvatarEl.textContent = initials;
+    if (profNameEl) profNameEl.textContent = newName;
+    if (profRoleEl) profRoleEl.textContent = `${newRole} • Active`;
+
+    const pdEmail = $('#pd-val-email');
+    const pdDept = $('#pd-val-dept');
+    const pdPhone = $('#pd-val-phone');
+    if (pdEmail) pdEmail.textContent = newEmail;
+    if (pdDept) pdDept.textContent = newDept;
+    if (pdPhone) pdPhone.textContent = newPhone;
+
+    alert('✨ Profile Details Saved Successfully!\nAccount information updated.');
   };
 
   window.logout = function() {
