@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumora Analytics — See Your Business Clearly. Grow With Confidence.</title>
+  <meta name="description" content="Every sale, customer, and insight in one place. Lumora Analytics helps teams make smarter decisions with real-time dashboards and easy-to-understand reports." />
+  <meta name="keywords" content="business analytics, dashboard, real-time data, revenue intelligence, SaaS analytics" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══════════════════ AMBIENT BACKGROUND ══════════════════ -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+    <div class="noise-overlay"></div>
+  </div>
+
+  <!-- ══════════════════ FLOATING 3D OBJECTS ══════════════════ -->
+  <div class="scene-objects" aria-hidden="true">
+    <div class="glass-sphere sphere-lg" id="sphere1"></div>
+    <div class="glass-sphere sphere-sm" id="sphere2"></div>
+    <div class="geo-ring ring-1" id="ring1"></div>
+    <div class="geo-ring ring-2" id="ring2"></div>
+    <div class="crystal-cube cube-1" id="cube1"></div>
+    <div class="crystal-cube cube-2" id="cube2"></div>
+    <div class="crystal-prism prism-1" id="prism1"></div>
+  </div>
+
+  <!-- ══════════════════ NAVIGATION ══════════════════ -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" id="nav-logo-link" aria-label="Lumora Analytics home">
+        <div class="logo-mark">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <circle cx="14" cy="14" r="13" stroke="#2ECC71" stroke-width="1.5" fill="none" opacity="0.3"/>
+            <circle cx="14" cy="14" r="7" fill="#2ECC71" opacity="0.15"/>
+            <path d="M7 17 L11 11 L15 14 L19 8 L21 10" stroke="#2ECC71" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="21" cy="10" r="2" fill="#2ECC71"/>
+          </svg>
+        </div>
+        <span class="logo-wordmark">Lumora<span class="logo-suffix"> Analytics</span></span>
+      </a>
+
+      <div class="nav-links" id="nav-links">
+        <a href="#features" class="nav-link" id="nav-features">Features</a>
+        <a href="#metrics" class="nav-link" id="nav-metrics">Metrics</a>
+        <a href="#dashboard" class="nav-link" id="nav-dashboard">Dashboard</a>
+        <a href="#pricing" class="nav-link" id="nav-pricing">Pricing</a>
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn-nav-ghost" id="btn-signin">Sign In</button>
+        <button class="btn-nav-primary" id="btn-nav-start">Start Free</button>
+      </div>
+
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══════════════════ HERO SECTION ══════════════════ -->
+  <section id="hero" aria-labelledby="hero-headline">
+    <div class="hero-wrap">
+
+      <!-- LEFT: Content -->
+      <div class="hero-left">
+        <div class="hero-badge" id="hero-badge">
+          <span class="badge-ping"></span>
+          <span>Trusted by 2,400+ businesses worldwide</span>
+        </div>
+
+        <h1 class="hero-headline" id="hero-headline">
+          See Your Business<br>
+          <span class="headline-accent">Clearly.</span> Grow With<br>
+          Confidence.
+        </h1>
+
+        <p class="hero-body">
+          Every sale, customer, and insight in one place. Lumora Analytics helps teams make smarter decisions with real-time dashboards and easy-to-understand reports.
+        </p>
+
+        <div class="hero-cta-row">
+          <button class="btn-hero-primary" id="cta-start-free">
+            Start Free
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="btn-hero-secondary" id="cta-view-demo">
+            <span class="demo-play">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 2L10 6L3 10V2Z" fill="currentColor"/></svg>
+            </span>
+            View Demo
+          </button>
+        </div>
+
+        <div class="hero-social-proof">
+          <div class="avatar-stack" aria-label="Customer avatars">
+            <div class="av av-1"></div>
+            <div class="av av-2"></div>
+            <div class="av av-3"></div>
+            <div class="av av-4"></div>
+          </div>
+          <div class="sp-text">
+            <div class="sp-stars" aria-label="5 star rating">★★★★★</div>
+            <span>4.9 from 1,200+ reviews</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Dashboard Preview -->
+      <div class="hero-right" id="dashboard">
+        <div class="dash-preview">
+
+          <!-- Main dashboard window -->
+          <div class="dash-window" id="dash-window">
+            <div class="dash-titlebar">
+              <div class="titlebar-dots">
+                <span class="td td-red"></span>
+                <span class="td td-yellow"></span>
+                <span class="td td-green"></span>
+              </div>
+              <span class="titlebar-label">Lumora Dashboard — Q3 Overview</span>
+            </div>
+
+            <div class="dash-body">
+              <!-- KPI Cards Row -->
+              <div class="kpi-row">
+                <div class="kpi-card" style="--kd: 0s" id="kpi-revenue">
+                  <div class="kpi-top">
+                    <span class="kpi-label">Total Revenue</span>
+                    <span class="kpi-badge up">↑ 24.8%</span>
+                  </div>
+                  <div class="kpi-value">$8.4M</div>
+                  <div class="kpi-sparkline" id="spark-revenue"></div>
+                </div>
+                <div class="kpi-card" style="--kd: 0.1s" id="kpi-customers">
+                  <div class="kpi-top">
+                    <span class="kpi-label">Active Customers</span>
+                    <span class="kpi-badge up">↑ 12%</span>
+                  </div>
+                  <div class="kpi-value">450K</div>
+                  <div class="kpi-sparkline" id="spark-customers"></div>
+                </div>
+                <div class="kpi-card" style="--kd: 0.2s" id="kpi-conversion">
+                  <div class="kpi-top">
+                    <span class="kpi-label">Conversion Rate</span>
+                    <span class="kpi-badge up">↑ 3.1%</span>
+                  </div>
+                  <div class="kpi-value">12.7%</div>
+                  <div class="kpi-sparkline" id="spark-conversion"></div>
+                </div>
+              </div>
+
+              <!-- Main chart -->
+              <div class="dash-chart-area">
+                <div class="dca-header">
+                  <div>
+                    <div class="dca-title">Revenue Trend</div>
+                    <div class="dca-sub">Last 12 months</div>
+                  </div>
+                  <div class="dca-tabs">
+                    <button class="dca-tab active" id="tab-1m">1M</button>
+                    <button class="dca-tab" id="tab-3m">3M</button>
+                    <button class="dca-tab" id="tab-1y">1Y</button>
+                  </div>
+                </div>
+                <canvas id="hero-chart" width="520" height="160" aria-label="Revenue trend chart"></canvas>
+              </div>
+
+              <!-- Bottom row: Donut + Satisfaction -->
+              <div class="dash-bottom-row">
+                <div class="dash-donut-card">
+                  <div class="ddc-title">Monthly Growth</div>
+                  <div class="ddc-body">
+                    <div class="donut-wrap">
+                      <canvas id="hero-donut" width="100" height="100" aria-label="Monthly growth donut chart"></canvas>
+                      <div class="donut-inner-label">
+                        <span class="dil-val">+24.8%</span>
+                        <span class="dil-sub">Growth</span>
+                      </div>
+                    </div>
+                    <div class="donut-legend">
+                      <div class="dl-row"><span class="dl-dot" style="background:#2ECC71"></span><span>Product</span><span class="dl-pct">42%</span></div>
+                      <div class="dl-row"><span class="dl-dot" style="background:#4ADE80"></span><span>Services</span><span class="dl-pct">32%</span></div>
+                      <div class="dl-row"><span class="dl-dot" style="background:#86efac"></span><span>Other</span><span class="dl-pct">26%</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dash-sat-card">
+                  <div class="dsc-title">Customer Satisfaction</div>
+                  <div class="dsc-score">4.8<span class="dsc-max">/5</span></div>
+                  <div class="dsc-stars">★★★★★</div>
+                  <div class="sat-bars">
+                    <div class="sat-bar-row"><span>5★</span><div class="sat-bar-track"><div class="sat-bar-fill" style="width:72%"></div></div><span>72%</span></div>
+                    <div class="sat-bar-row"><span>4★</span><div class="sat-bar-track"><div class="sat-bar-fill" style="width:20%"></div></div><span>20%</span></div>
+                    <div class="sat-bar-row"><span>3★</span><div class="sat-bar-track"><div class="sat-bar-fill" style="width:5%"></div></div><span>5%</span></div>
+                    <div class="sat-bar-row"><span>2★</span><div class="sat-bar-track"><div class="sat-bar-fill" style="width:2%"></div></div><span>2%</span></div>
+                    <div class="sat-bar-row"><span>1★</span><div class="sat-bar-track"><div class="sat-bar-fill" style="width:1%"></div></div><span>1%</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating mini notification -->
+          <div class="float-notif" id="float-notif">
+            <div class="fn-icon">📈</div>
+            <div class="fn-text">
+              <div class="fn-title">New milestone</div>
+              <div class="fn-body">Revenue crossed $8M this quarter</div>
+            </div>
+          </div>
+
+          <!-- Floating insight chip -->
+          <div class="float-chip" id="float-chip">
+            <span class="chip-dot"></span>
+            <span>Conversion up 3.1% this week</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ LOGOS MARQUEE ══════════════════ -->
+  <section id="logos" aria-label="Trusted by leading companies">
+    <div class="logos-wrap">
+      <p class="logos-label">Trusted by teams at</p>
+      <div class="marquee-track" role="list">
+        <div class="marquee-inner" aria-hidden="true">
+          <span class="brand-logo">Meridian</span>
+          <span class="brand-logo">Claravox</span>
+          <span class="brand-logo">Novaris</span>
+          <span class="brand-logo">Peakfield</span>
+          <span class="brand-logo">Arclight</span>
+          <span class="brand-logo">Stellara</span>
+          <span class="brand-logo">Greenway</span>
+          <span class="brand-logo">Meridian</span>
+          <span class="brand-logo">Claravox</span>
+          <span class="brand-logo">Novaris</span>
+          <span class="brand-logo">Peakfield</span>
+          <span class="brand-logo">Arclight</span>
+          <span class="brand-logo">Stellara</span>
+          <span class="brand-logo">Greenway</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ FEATURES SECTION ══════════════════ -->
+  <section id="features" aria-labelledby="features-heading">
+    <div class="section-container">
+      <div class="section-eyebrow">Core Capabilities</div>
+      <h2 class="section-heading" id="features-heading">
+        Everything your team needs<br>
+        <span class="heading-accent">to understand your data</span>
+      </h2>
+      <p class="section-body">
+        From revenue tracking to customer insights — all in one clean, intuitive platform.
+      </p>
+
+      <div class="features-grid">
+
+        <div class="feature-card" data-reveal id="fc-realtime">
+          <div class="fc-icon-wrap" style="--icon-color: #2ECC71">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M2 20L7 14L11 17L15 11L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="22" cy="4" r="2" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="fc-title">Real-time Revenue Tracking</h3>
+          <p class="fc-desc">Watch your revenue move in real time. Every transaction and MRR change updates instantly.</p>
+          <div class="fc-stat-row">
+            <div class="fc-stat"><span class="fcs-val">$8.4M</span><span class="fcs-lbl">Tracked</span></div>
+            <div class="fc-stat"><span class="fcs-val">Live</span><span class="fcs-lbl">Updates</span></div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-reveal id="fc-customers">
+          <div class="fc-icon-wrap" style="--icon-color: #4ADE80">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+              <circle cx="17" cy="9" r="3" stroke="currentColor" stroke-width="2" opacity="0.6"/>
+              <path d="M1 21C1 17 4.5 14 9 14C13.5 14 17 17 17 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="fc-title">Customer Intelligence</h3>
+          <p class="fc-desc">Understand who your best customers are, what keeps them, and what risks churn automatically.</p>
+          <div class="fc-stat-row">
+            <div class="fc-stat"><span class="fcs-val">450K</span><span class="fcs-lbl">Active</span></div>
+            <div class="fc-stat"><span class="fcs-val">94%</span><span class="fcs-lbl">Retention</span></div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-reveal id="fc-growth">
+          <div class="fc-icon-wrap" style="--icon-color: #2ECC71">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="3" y="14" width="4" height="7" rx="1" fill="currentColor" opacity="0.4"/>
+              <rect x="9" y="9" width="4" height="12" rx="1" fill="currentColor" opacity="0.7"/>
+              <rect x="15" y="5" width="4" height="16" rx="1" fill="currentColor"/>
+              <path d="M3 6L9 3L15 5L21 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+            </svg>
+          </div>
+          <h3 class="fc-title">Monthly Growth Reports</h3>
+          <p class="fc-desc">Automated monthly growth summaries sent straight to your inbox without spreadsheet hassle.</p>
+          <div class="fc-stat-row">
+            <div class="fc-stat"><span class="fcs-val">+24.8%</span><span class="fcs-lbl">MoM Growth</span></div>
+            <div class="fc-stat"><span class="fcs-val">Auto</span><span class="fcs-lbl">Reports</span></div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-reveal id="fc-conversion">
+          <div class="fc-icon-wrap" style="--icon-color: #4ADE80">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2L15 9H22L16.5 13.5L18.5 21L12 17L5.5 21L7.5 13.5L2 9H9L12 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+          <h3 class="fc-title">Conversion Funnel</h3>
+          <p class="fc-desc">See exactly where leads drop off and optimize every stage of your sales funnel easily.</p>
+          <div class="fc-stat-row">
+            <div class="fc-stat"><span class="fcs-val">12.7%</span><span class="fcs-lbl">CVR</span></div>
+            <div class="fc-stat"><span class="fcs-val">↑ 3.1%</span><span class="fcs-lbl">vs last mo</span></div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-reveal id="fc-csat">
+          <div class="fc-icon-wrap" style="--icon-color: #2ECC71">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="9" cy="10" r="1.2" fill="currentColor"/>
+              <circle cx="15" cy="10" r="1.2" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="fc-title">Customer Satisfaction</h3>
+          <p class="fc-desc">Collect and analyze CSAT and NPS data automatically to keep your user base happy.</p>
+          <div class="fc-stat-row">
+            <div class="fc-stat"><span class="fcs-val">4.8/5</span><span class="fcs-lbl">CSAT</span></div>
+            <div class="fc-stat"><span class="fcs-val">★★★★★</span><span class="fcs-lbl">Rating</span></div>
+          </div>
+        </div>
+
+        <div class="feature-card" data-reveal id="fc-alerts">
+          <div class="fc-icon-wrap" style="--icon-color: #4ADE80">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M18 8A6 6 0 0 0 6 8C6 15 3 17 3 17H21S18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M13.73 21A2 2 0 0 1 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="fc-title">Automated Insights & Alerts</h3>
+          <p class="fc-desc">Get instant Slack and email notifications when key revenue metrics spike or drop unexpectedly.</p>
+          <div class="fc-stat-row">
+            <div class="fc-stat"><span class="fcs-val">Instant</span><span class="fcs-lbl">Alerts</span></div>
+            <div class="fc-stat"><span class="fcs-val">24/7</span><span class="fcs-lbl">Monitoring</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ STATS BAND ══════════════════ -->
+  <section id="stats" aria-label="Key business metrics">
+    <div class="stats-band">
+      <div class="stat-block" id="stat-revenue">
+        <span class="sb-val" data-target="8.4" data-prefix="$" data-suffix="M">$0M</span>
+        <span class="sb-lbl">Revenue Tracked</span>
+      </div>
+      <div class="stat-divider" aria-hidden="true"></div>
+      <div class="stat-block" id="stat-customers">
+        <span class="sb-val" data-target="450" data-prefix="" data-suffix="K">0K</span>
+        <span class="sb-lbl">Active Customers</span>
+      </div>
+      <div class="stat-divider" aria-hidden="true"></div>
+      <div class="stat-block" id="stat-satisfaction">
+        <span class="sb-val" data-target="4.8" data-prefix="" data-suffix="/5">0/5</span>
+        <span class="sb-lbl">Avg Satisfaction</span>
+      </div>
+      <div class="stat-divider" aria-hidden="true"></div>
+      <div class="stat-block" id="stat-growth">
+        <span class="sb-val" data-target="135" data-prefix="+" data-suffix="%">+0%</span>
+        <span class="sb-lbl">Average ROI</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ METRICS / LIVE SECTION ══════════════════ -->
+  <section id="metrics" aria-labelledby="metrics-heading">
+    <div class="section-container">
+      <div class="metrics-split">
+        <div class="ms-left">
+          <div class="section-eyebrow">Live Metrics</div>
+          <h2 class="section-heading" id="metrics-heading">
+            Your numbers,<br>
+            <span class="heading-accent">always up to date</span>
+          </h2>
+          <p class="section-body">
+            Lumora pulls from every data source your business uses — CRM, payments, support tickets, and more — into one live view.
+          </p>
+
+          <div class="metric-items">
+            <div class="mi-item" data-reveal id="mi-1">
+              <div class="mi-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M2 16L6 11L9 13L13 8L18 3" stroke="#2ECC71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="mi-text">
+                <div class="mi-title">Revenue monitoring</div>
+                <div class="mi-sub">Track MRR, ARR, and one-time revenue in real time across all channels.</div>
+              </div>
+            </div>
+            <div class="mi-item" data-reveal id="mi-2">
+              <div class="mi-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="8" cy="6" r="4" stroke="#2ECC71" stroke-width="1.8"/>
+                  <path d="M1 18C1 14 4 11 8 11C12 11 15 14 15 18" stroke="#2ECC71" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M15 8C17.5 8.5 19 10.5 19 13" stroke="#2ECC71" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+                </svg>
+              </div>
+              <div class="mi-text">
+                <div class="mi-title">Customer health scores</div>
+                <div class="mi-sub">Spot at-risk accounts before they churn with automated health scoring.</div>
+              </div>
+            </div>
+            <div class="mi-item" data-reveal id="mi-3">
+              <div class="mi-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <rect x="2" y="10" width="3" height="8" rx="1" fill="#2ECC71" opacity="0.5"/>
+                  <rect x="7" y="6" width="3" height="12" rx="1" fill="#2ECC71" opacity="0.7"/>
+                  <rect x="12" y="2" width="3" height="16" rx="1" fill="#2ECC71"/>
+                  <rect x="17" y="7" width="3" height="11" rx="1" fill="#2ECC71" opacity="0.6"/>
+                </svg>
+              </div>
+              <div class="mi-text">
+                <div class="mi-title">Growth trend analysis</div>
+                <div class="mi-sub">Understand which products, campaigns, and regions are driving your growth.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ms-right">
+          <div class="metrics-card" id="metrics-live-card">
+            <div class="mc-header">
+              <span class="mc-title">Live Activity</span>
+              <div class="mc-live-badge">
+                <span class="live-dot"></span>
+                <span>Live</span>
+              </div>
+            </div>
+            <div class="live-feed" id="live-feed">
+              <!-- populated by JS -->
+            </div>
+            <canvas id="metrics-sparkline" width="380" height="100" aria-label="Live metrics sparkline chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ PRICING ══════════════════ -->
+  <section id="pricing" aria-labelledby="pricing-heading">
+    <div class="section-container">
+      <div class="section-eyebrow">Pricing</div>
+      <h2 class="section-heading" id="pricing-heading">
+        Simple, transparent<br>
+        <span class="heading-accent">pricing for every team</span>
+      </h2>
+      <p class="section-body">
+        Start free and upgrade as your team grows. No hidden fees, no surprises.
+      </p>
+
+      <div class="pricing-toggle-wrap">
+        <span>Monthly</span>
+        <button class="pricing-toggle" id="pricing-toggle" aria-pressed="false" aria-label="Toggle annual billing">
+          <span class="toggle-thumb"></span>
+        </button>
+        <span>Annual <span class="save-badge">Save 20%</span></span>
+      </div>
+
+      <div class="pricing-grid">
+
+        <div class="pricing-card" data-reveal id="plan-starter">
+          <div class="plan-name">Starter</div>
+          <div class="plan-price">
+            <span class="plan-currency">$</span>
+            <span class="plan-amount" data-monthly="0" data-annual="0">0</span>
+            <span class="plan-period">/month</span>
+          </div>
+          <p class="plan-desc">Perfect for small teams just getting started with analytics.</p>
+          <ul class="plan-features">
+            <li class="pf-item pf-yes">Up to 5 dashboards</li>
+            <li class="pf-item pf-yes">10K data points/month</li>
+            <li class="pf-item pf-yes">Basic reports</li>
+            <li class="pf-item pf-yes">Email summaries</li>
+            <li class="pf-item pf-no">Custom integrations</li>
+            <li class="pf-item pf-no">API access</li>
+          </ul>
+          <button class="plan-btn plan-btn-outline" id="plan-btn-starter">Get Started Free</button>
+        </div>
+
+        <div class="pricing-card pricing-card-featured" data-reveal id="plan-growth">
+          <div class="plan-popular-badge">Most Popular</div>
+          <div class="plan-name">Growth</div>
+          <div class="plan-price">
+            <span class="plan-currency">$</span>
+            <span class="plan-amount" data-monthly="49" data-annual="39">49</span>
+            <span class="plan-period">/month</span>
+          </div>
+          <p class="plan-desc">For growing teams that need more data, integrations, and automation.</p>
+          <ul class="plan-features">
+            <li class="pf-item pf-yes">Unlimited dashboards</li>
+            <li class="pf-item pf-yes">500K data points/month</li>
+            <li class="pf-item pf-yes">Advanced reports</li>
+            <li class="pf-item pf-yes">Slack & email alerts</li>
+            <li class="pf-item pf-yes">15+ integrations</li>
+            <li class="pf-item pf-no">Dedicated support</li>
+          </ul>
+          <button class="plan-btn plan-btn-primary" id="plan-btn-growth">Start Free Trial</button>
+        </div>
+
+        <div class="pricing-card" data-reveal id="plan-enterprise">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price">
+            <span class="plan-currency"></span>
+            <span class="plan-amount" data-monthly="Custom" data-annual="Custom">Custom</span>
+            <span class="plan-period"></span>
+          </div>
+          <p class="plan-desc">For large organizations that need custom SLAs, security, and support.</p>
+          <ul class="plan-features">
+            <li class="pf-item pf-yes">Everything in Growth</li>
+            <li class="pf-item pf-yes">Unlimited data</li>
+            <li class="pf-item pf-yes">Custom integrations</li>
+            <li class="pf-item pf-yes">SSO / SAML</li>
+            <li class="pf-item pf-yes">Dedicated CSM</li>
+            <li class="pf-item pf-yes">SLA guarantee</li>
+          </ul>
+          <button class="plan-btn plan-btn-outline" id="plan-btn-enterprise">Talk to Sales</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ TESTIMONIALS ══════════════════ -->
+  <section id="testimonials" aria-labelledby="testimonials-heading">
+    <div class="section-container">
+      <div class="section-eyebrow">Customer Stories</div>
+      <h2 class="section-heading" id="testimonials-heading">
+        Real teams.<br>
+        <span class="heading-accent">Real results.</span>
+      </h2>
+
+      <div class="testimonials-grid">
+
+        <div class="testi-card" data-reveal id="testi-1">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"Lumora replaced 4 different tools for us. Now our entire team knows exactly how the business is performing — without needing a data analyst."</p>
+          <div class="testi-author">
+            <div class="testi-avatar ta-1"></div>
+            <div class="testi-info">
+              <div class="testi-name">Sarah Chen</div>
+              <div class="testi-role">VP of Operations, Meridian</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card" data-reveal id="testi-2">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"We went from monthly reports to real-time dashboards in one week. The setup was incredibly smooth and the interface is genuinely beautiful."</p>
+          <div class="testi-author">
+            <div class="testi-avatar ta-2"></div>
+            <div class="testi-info">
+              <div class="testi-name">Marcus Rivera</div>
+              <div class="testi-role">Head of Growth, Claravox</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card" data-reveal id="testi-3">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"I showed Lumora to our board last quarter. The clean dashboards and clear metrics built more trust than any slide deck ever could."</p>
+          <div class="testi-author">
+            <div class="testi-avatar ta-3"></div>
+            <div class="testi-info">
+              <div class="testi-name">Priya Nair</div>
+              <div class="testi-role">CEO, Novaris Technologies</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ CTA SECTION ══════════════════ -->
+  <section id="cta-section" aria-labelledby="cta-heading">
+    <div class="section-container">
+      <div class="cta-card" id="cta-card">
+        <div class="cta-ambient-1"></div>
+        <div class="cta-ambient-2"></div>
+        <div class="cta-inner">
+          <div class="section-eyebrow" style="color: #4ADE80">Get started today</div>
+          <h2 class="cta-heading" id="cta-heading">
+            See your business clearly.<br>
+            Start free, no credit card.
+          </h2>
+          <p class="cta-body">
+            Join 2,400+ companies already using Lumora to grow with confidence.
+          </p>
+          <div class="cta-actions">
+            <button class="btn-hero-primary" id="cta-final-start">Start Free Today</button>
+            <button class="btn-hero-secondary btn-ghost-white" id="cta-final-demo">Schedule a Demo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ FOOTER ══════════════════ -->
+  <footer id="footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-mark">
+              <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                <circle cx="14" cy="14" r="13" stroke="#2ECC71" stroke-width="1.5" fill="none" opacity="0.3"/>
+                <path d="M7 17 L11 11 L15 14 L19 8 L21 10" stroke="#2ECC71" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <circle cx="21" cy="10" r="2" fill="#2ECC71"/>
+              </svg>
+            </div>
+            <span class="logo-wordmark">Lumora<span class="logo-suffix"> Analytics</span></span>
+          </div>
+          <p class="footer-tagline">See your business clearly. Grow with confidence.</p>
+        </div>
+
+        <div class="footer-links-group">
+          <div class="footer-col">
+            <div class="footer-col-title">Product</div>
+            <a href="#features" class="footer-link">Features</a>
+            <a href="#pricing" class="footer-link">Pricing</a>
+            <a href="#" class="footer-link">Integrations</a>
+            <a href="#" class="footer-link">Changelog</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Company</div>
+            <a href="#" class="footer-link">About</a>
+            <a href="#" class="footer-link">Blog</a>
+            <a href="#" class="footer-link">Careers</a>
+            <a href="#" class="footer-link">Contact</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Resources</div>
+            <a href="#" class="footer-link">Documentation</a>
+            <a href="#" class="footer-link">API Reference</a>
+            <a href="#" class="footer-link">Status</a>
+            <a href="#" class="footer-link">Privacy</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 Lumora Analytics, Inc. All rights reserved.</span>
+        <div class="footer-socials">
+          <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+          <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+          <a href="#" class="social-link" aria-label="GitHub">⌥</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
