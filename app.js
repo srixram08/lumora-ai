@@ -1,7 +1,9 @@
 /* ══════════════════════════════════════════════════
    LUMORA ANALYTICS — Application JavaScript
-   Currency: Rupee (₹)
-   Login System + Simple Clean Dashboard
+   Features:
+   1. Two Login System (Admin vs Manager)
+   2. Working Notification Tray Dropdown & Clear Badges
+   3. Simple Clean Rupee Data Engine
    ══════════════════════════════════════════════════ */
 
 'use strict';
@@ -9,37 +11,152 @@
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
-// ─── Login & Auth Handler ──────────────────────────
+// User Roles Config
+const Profiles = {
+  admin: {
+    email: 'sarah.chen@lumora.ai',
+    name: 'Sarah Chen',
+    role: 'VP of Operations',
+    initials: 'SC',
+    badgeText: 'Admin Login',
+  },
+  manager: {
+    email: 'alex.morgan@lumora.ai',
+    name: 'Alex Morgan',
+    role: 'Sales Manager',
+    initials: 'AM',
+    badgeText: 'Manager Login',
+  }
+};
+
+let currentRole = 'admin';
+let unreadNotifications = 3;
+
+// ─── Two-Login Selection & Auth ────────────────────
 function initAuth() {
   const loginForm = $('#login-form');
   const loginScreen = $('#login-screen');
   const appLayout = $('#app-layout');
 
+  window.selectRole = function(roleKey) {
+    if (!Profiles[roleKey]) return;
+    currentRole = roleKey;
+
+    // Toggle active role card UI
+    $('#role-admin-btn')?.classList.toggle('active', roleKey === 'admin');
+    $('#role-manager-btn')?.classList.toggle('active', roleKey === 'manager');
+
+    // Set email input & button label
+    const emailInput = $('#login-email');
+    const submitBtn = $('#btn-login');
+
+    if (emailInput) emailInput.value = Profiles[roleKey].email;
+    if (submitBtn) submitBtn.textContent = `Sign In as ${roleKey === 'admin' ? 'Admin' : 'Manager'}`;
+  };
+
   loginForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    doLogin();
+    doLogin(currentRole);
   });
 
-  window.demoLogin = function() {
-    doLogin();
-  };
+  window.doLogin = function(roleKey = 'admin') {
+    const p = Profiles[roleKey] || Profiles.admin;
 
-  window.logout = function() {
-    if (confirm('Are you sure you want to log out of Lumora Analytics?')) {
-      appLayout.style.display = 'none';
-      loginScreen.style.display = 'flex';
-    }
-  };
+    // Update user info across topbar, sidebar, and profile view
+    const userAvatarEl = $('#topbar-user-avatar');
+    const sbAvatarEl = $('#sidebar-user-avatar');
+    const sbNameEl = $('#sidebar-user-name');
+    const sbRoleEl = $('#sidebar-user-role');
+    const profAvatarEl = $('#profile-page-avatar');
+    const profNameEl = $('#profile-page-name');
+    const profRoleEl = $('#profile-page-role');
 
-  function doLogin() {
+    if (userAvatarEl) userAvatarEl.textContent = p.initials;
+    if (sbAvatarEl) sbAvatarEl.textContent = p.initials;
+    if (sbNameEl) sbNameEl.textContent = p.name;
+    if (sbRoleEl) sbRoleEl.textContent = p.role;
+    if (profAvatarEl) profAvatarEl.textContent = p.initials;
+    if (profNameEl) profNameEl.textContent = p.name;
+    if (profRoleEl) profRoleEl.textContent = p.role;
+
     loginScreen.style.display = 'none';
     appLayout.style.display = 'flex';
-    
-    // Initialize charts upon entering dashboard
+
+    // Render charts
     setTimeout(() => {
       initHeroChart();
       initHeroDonut();
     }, 100);
+  };
+
+  window.logout = function() {
+    if (confirm('Log out of Lumora Analytics?')) {
+      appLayout.style.display = 'none';
+      loginScreen.style.display = 'flex';
+      // Close dropdown if open
+      $('#notif-dropdown')?.classList.remove('open');
+    }
+  };
+}
+
+// ─── WORKING NOTIFICATION TRAY DROPDOWN ───────────
+function initNotificationTray() {
+  const bellBtn = $('#topbar-bell');
+  const dropdown = $('#notif-dropdown');
+  const markAllBtn = $('#btn-mark-all-read');
+
+  // Toggle notification tray on bell click
+  bellBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown?.classList.toggle('open');
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (dropdown && !dropdown.contains(e.target) && !bellBtn.contains(e.target)) {
+      dropdown.classList.remove('open');
+    }
+  });
+
+  // Mark all as read
+  markAllBtn?.addEventListener('click', () => {
+    unreadNotifications = 0;
+    updateNotificationBadges();
+
+    // Mark items visually
+    $$('.nd-item').forEach(item => item.classList.remove('unread'));
+  });
+
+  window.markItemRead = function(itemEl) {
+    if (itemEl.classList.contains('unread')) {
+      itemEl.classList.remove('unread');
+      if (unreadNotifications > 0) {
+        unreadNotifications--;
+        updateNotificationBadges();
+      }
+    }
+  };
+
+  window.openNotifView = function() {
+    dropdown?.classList.remove('open');
+    const notifBtn = $('#nav-notifications');
+    if (notifBtn) notifBtn.click();
+  };
+}
+
+function updateNotificationBadges() {
+  const bellBadge = $('#bell-count');
+  const sbBadge = $('#sidebar-notif-count');
+  const ndUnreadBadge = $('#nd-unread-count');
+
+  if (unreadNotifications <= 0) {
+    if (bellBadge) bellBadge.style.display = 'none';
+    if (sbBadge) sbBadge.style.display = 'none';
+    if (ndUnreadBadge) ndUnreadBadge.textContent = 'All caught up';
+  } else {
+    if (bellBadge) { bellBadge.style.display = 'flex'; bellBadge.textContent = unreadNotifications; }
+    if (sbBadge) { sbBadge.style.display = 'inline-block'; sbBadge.textContent = unreadNotifications; }
+    if (ndUnreadBadge) ndUnreadBadge.textContent = `${unreadNotifications} unread`;
   }
 }
 
@@ -52,11 +169,11 @@ const ViewTitles = {
   'products': 'Products & Pricing (₹)',
   'orders': 'Orders & Transactions (₹)',
   'revenue': 'Revenue Breakdown (₹)',
-  'ai-insights': '🤖 Lumora AI Intelligence',
-  'forecast': '📅 Financial Forecast (₹)',
-  'reports': '📄 Automated Business Reports',
+  'ai-insights': '🤖 Lumora AI Insights',
+  'forecast': '📅 Financial Forecast',
+  'reports': '📄 Business Reports',
   'notifications': '🔔 System Notifications',
-  'settings': '⚙️ System Settings',
+  'settings': '⚙️ Settings',
   'profile': '👤 User Profile',
 };
 
@@ -72,26 +189,19 @@ function initNavigation() {
       const targetView = item.dataset.view;
       if (!targetView) return;
 
-      // Update sidebar active item
       navItems.forEach(n => n.classList.remove('active'));
       item.classList.add('active');
 
-      // Update Topbar Title
       if (viewTitle && ViewTitles[targetView]) {
         viewTitle.textContent = ViewTitles[targetView];
       }
 
-      // Switch View Panels
       $$('.view-panel').forEach(panel => panel.classList.remove('active'));
       const targetPanel = $(`#view-${targetView}-panel`);
-      if (targetPanel) {
-        targetPanel.classList.add('active');
-      }
+      if (targetPanel) targetPanel.classList.add('active');
 
-      // Close mobile sidebar if open
       sidebar?.classList.remove('open');
 
-      // Trigger chart re-render
       setTimeout(() => {
         if (targetView === 'dashboard') {
           initHeroChart();
@@ -105,12 +215,10 @@ function initNavigation() {
     });
   });
 
-  // Sidebar toggle
   sidebarToggle?.addEventListener('click', () => {
     sidebar?.classList.toggle('open');
   });
 
-  // Logout button in sidebar
   $('#nav-logout')?.addEventListener('click', () => {
     window.logout();
   });
@@ -127,7 +235,7 @@ function normalizePoints(data, w, h, padding = 10) {
   }));
 }
 
-// ─── Hero Revenue Chart (₹ Cr) ─────────────────────
+// ─── Hero Revenue Chart (₹ Lakhs) ──────────────────
 function initHeroChart() {
   const canvas = $('#hero-chart');
   if (!canvas) return;
@@ -153,7 +261,6 @@ function initHeroChart() {
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, w, h);
 
-    // Grid lines
     ctx.strokeStyle = 'rgba(255,255,255,0.04)';
     ctx.lineWidth = 1;
     for (let i = 1; i < 4; i++) {
@@ -164,7 +271,6 @@ function initHeroChart() {
     const points = normalizePoints(data, w, h, 12);
     if (points.length < 2) return;
 
-    // Gradient fill
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
@@ -186,7 +292,6 @@ function initHeroChart() {
     ctx.fill();
     ctx.restore();
 
-    // Line
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
@@ -201,7 +306,6 @@ function initHeroChart() {
     ctx.stroke();
     ctx.restore();
 
-    // Last dot
     ctx.save();
     ctx.beginPath(); ctx.arc(last.x, last.y, 5, 0, Math.PI * 2);
     ctx.fillStyle = '#2ECC71'; ctx.fill();
@@ -212,7 +316,6 @@ function initHeroChart() {
 
   draw(currentKey);
 
-  // Tabs
   $$('#view-dashboard-panel .dca-tab').forEach(tab => {
     tab.addEventListener('click', function () {
       $$('#view-dashboard-panel .dca-tab').forEach(t => t.classList.remove('active'));
@@ -266,7 +369,6 @@ function initHeroDonut() {
     angle += slice;
   });
 
-  // Inner cutout label
   ctx.beginPath();
   ctx.arc(cx, cy, inner, 0, Math.PI * 2);
   ctx.fillStyle = 'rgba(22,27,34,0.95)';
@@ -282,7 +384,7 @@ function initHeroDonut() {
   ctx.fillText('MoM', cx, cy + 10);
 }
 
-// ─── Analytics Feature Chart (₹ Cr) ────────────────
+// ─── Analytics Feature Chart ───────────────────────
 function initFeatureChart() {
   const canvas = $('#fc-chart-1');
   if (!canvas) return;
@@ -301,7 +403,6 @@ function initFeatureChart() {
 
     const points = normalizePoints(data, w, h, 8);
 
-    // Line
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
@@ -367,11 +468,10 @@ function initLiveFeed() {
 
   const events = [
     { icon: '💰', title: 'New sale recorded', detail: 'Mahindra Group purchased Enterprise Suite', val: '+₹4,99,999' },
-    { icon: '👤', title: 'New enterprise user', detail: 'Sarah Chen added 12 new team seats', val: '+12 Seats' },
-    { icon: '📈', title: 'Revenue milestone', detail: 'Monthly target reached ₹69.8 Cr', val: '₹69.8 Cr' },
+    { icon: '👤', title: 'New enterprise user', detail: 'Added 12 team seats', val: '+12 Seats' },
+    { icon: '📈', title: 'Revenue milestone', detail: 'Monthly target reached ₹50.0 Lakhs', val: '₹50.0 Lakhs' },
     { icon: '⭐', title: '5-Star Review', detail: 'Reliance Retail rated Lumora 5/5', val: '5.0 ★' },
-    { icon: '🤖', title: 'AI Insight Alert', detail: 'High demand forecast for Bengaluru cluster', val: '+34% Proj' },
-    { icon: '📦', title: 'License Renewal', detail: 'Infosys Labs renewed annual contract', val: '+₹42,10,000' },
+    { icon: '🤖', title: 'AI Insight Alert', detail: 'Demand forecast spike in Bengaluru', val: '+34% Proj' },
   ];
 
   function addItem() {
@@ -397,11 +497,12 @@ function initLiveFeed() {
 // ─── Init ──────────────────────────────────────────
 function init() {
   initAuth();
+  initNotificationTray();
   initNavigation();
   initLiveFeed();
 
   console.log(
-    '%c✦ Lumora Analytics (₹ INR) Dashboard Initialized',
+    '%c✦ Lumora Analytics (Two Logins & Working Notifications) Initialized',
     'color:#2ECC71;font-size:14px;font-weight:700;'
   );
 }

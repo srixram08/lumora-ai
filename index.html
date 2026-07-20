@@ -20,7 +20,7 @@
     <div class="noise-overlay"></div>
   </div>
 
-  <!-- ══════════════════ LOGIN SCREEN ══════════════════ -->
+  <!-- ══════════════════ LOGIN SCREEN (TWO LOGINS) ══════════════════ -->
   <div class="login-screen" id="login-screen">
     <div class="login-card">
       <div class="login-logo">
@@ -36,46 +36,52 @@
       </div>
 
       <div class="login-header">
-        <h2>Welcome back</h2>
-        <p>Sign in to your business intelligence workspace</p>
+        <h2>Select Login Profile</h2>
+        <p>Choose an account workspace to sign in</p>
+      </div>
+
+      <!-- TWO LOGIN PROFILE SELECTOR -->
+      <div class="two-login-grid">
+        <button class="role-card active" id="role-admin-btn" onclick="selectRole('admin')">
+          <div class="rc-avatar">SC</div>
+          <div class="rc-info">
+            <div class="rc-title">Admin Login</div>
+            <div class="rc-sub">Sarah Chen (VP Operations)</div>
+          </div>
+          <span class="rc-check">✓</span>
+        </button>
+
+        <button class="role-card" id="role-manager-btn" onclick="selectRole('manager')">
+          <div class="rc-avatar manager">AM</div>
+          <div class="rc-info">
+            <div class="rc-title">Manager Login</div>
+            <div class="rc-sub">Alex Morgan (Sales Manager)</div>
+          </div>
+          <span class="rc-check">✓</span>
+        </button>
       </div>
 
       <form class="login-form" id="login-form">
         <div class="form-group">
           <label for="login-email">Work Email</label>
-          <input type="email" id="login-email" value="sarah.chen@lumora.ai" required placeholder="name@company.com" />
+          <input type="email" id="login-email" value="sarah.chen@lumora.ai" required />
         </div>
 
         <div class="form-group">
           <div class="label-row">
             <label for="login-password">Password</label>
-            <a href="#" class="forgot-link" onclick="alert('Password reset link sent to email.')">Forgot?</a>
+            <a href="#" class="forgot-link" onclick="alert('Password reset link sent.')">Forgot?</a>
           </div>
           <input type="password" id="login-password" value="••••••••••••" required />
         </div>
 
-        <div class="remember-row">
-          <label class="checkbox-container">
-            <input type="checkbox" checked />
-            <span class="checkmark"></span>
-            Remember me for 30 days
-          </label>
-        </div>
-
         <button type="submit" class="btn-login-submit" id="btn-login">
-          Sign In to Dashboard
+          Sign In as Admin
         </button>
       </form>
 
-      <div class="login-divider"><span>or sign in with</span></div>
-
-      <div class="social-login-grid">
-        <button class="btn-social" onclick="demoLogin()">Google</button>
-        <button class="btn-social" onclick="demoLogin()">Single Sign-On (SSO)</button>
-      </div>
-
       <div class="login-footer">
-        <span>Don't have an account? <a href="#" onclick="demoLogin()">Request Demo Access</a></span>
+        <span>Need assistance? <a href="#" onclick="doLogin('admin')">Quick Demo Login</a></span>
       </div>
     </div>
   </div>
@@ -98,7 +104,6 @@
       </div>
 
       <nav class="sidebar-nav">
-        <!-- Main Navigation -->
         <div class="nav-group">
           <div class="nav-group-title">MAIN NAVIGATION</div>
           <button class="nav-item active" data-view="dashboard" id="nav-dashboard">
@@ -134,7 +139,6 @@
 
         <div class="sidebar-divider"></div>
 
-        <!-- Insights -->
         <div class="nav-group">
           <div class="nav-group-title">INSIGHTS</div>
           <button class="nav-item" data-view="ai-insights" id="nav-ai-insights">
@@ -154,13 +158,12 @@
 
         <div class="sidebar-divider"></div>
 
-        <!-- Administration -->
         <div class="nav-group">
           <div class="nav-group-title">ADMINISTRATION</div>
           <button class="nav-item" data-view="notifications" id="nav-notifications">
             <span class="nav-icon">🔔</span>
             <span class="nav-label">Notifications</span>
-            <span class="nav-badge-num">3</span>
+            <span class="nav-badge-num" id="sidebar-notif-count">3</span>
           </button>
           <button class="nav-item" data-view="settings" id="nav-settings">
             <span class="nav-icon">⚙️</span>
@@ -179,10 +182,10 @@
 
       <!-- Sidebar User Footer -->
       <div class="sidebar-user-footer">
-        <div class="suf-avatar">SC</div>
+        <div class="suf-avatar" id="sidebar-user-avatar">SC</div>
         <div class="suf-text">
-          <div class="suf-name">Sarah Chen</div>
-          <div class="suf-role">VP of Operations</div>
+          <div class="suf-name" id="sidebar-user-name">Sarah Chen</div>
+          <div class="suf-role" id="sidebar-user-role">VP of Operations</div>
         </div>
         <span class="suf-status-dot"></span>
       </div>
@@ -206,22 +209,55 @@
         </div>
 
         <div class="topbar-right">
-          <div class="time-range-chip">
-            <span class="tr-icon">📅</span>
-            <select id="time-range-select">
-              <option value="q3">Q3 2026</option>
-              <option value="30d">Last 30 Days</option>
-              <option value="7d">Last 7 Days</option>
-              <option value="1y">This Year</option>
-            </select>
-          </div>
           <div class="currency-chip">
             <span>₹ INR</span>
           </div>
-          <button class="topbar-icon-btn" id="topbar-bell" title="Notifications">
-            🔔<span class="bell-badge">3</span>
-          </button>
-          <div class="topbar-avatar" title="Logout" onclick="logout()">SC</div>
+
+          <!-- NOTIFICATION BELL ICON (WITH WORKING DROPDOWN) -->
+          <div class="topbar-notif-wrap">
+            <button class="topbar-icon-btn" id="topbar-bell" title="Notifications" aria-label="Notifications">
+              🔔<span class="bell-badge" id="bell-count">3</span>
+            </button>
+
+            <!-- Working Notification Dropdown Tray -->
+            <div class="notif-dropdown" id="notif-dropdown">
+              <div class="nd-header">
+                <div class="nd-title">Notifications <span class="nd-badge" id="nd-unread-count">3 unread</span></div>
+                <button class="btn-clear-notif" id="btn-mark-all-read">Mark all read</button>
+              </div>
+              <div class="nd-list" id="nd-list">
+                <div class="nd-item unread" onclick="markItemRead(this)">
+                  <span class="nd-icon">💰</span>
+                  <div class="nd-text">
+                    <div class="nd-item-title">Revenue Goal Reached</div>
+                    <div class="nd-item-sub">Monthly target of ₹50 Lakhs achieved!</div>
+                    <div class="nd-time">10m ago</div>
+                  </div>
+                </div>
+                <div class="nd-item unread" onclick="markItemRead(this)">
+                  <span class="nd-icon">👥</span>
+                  <div class="nd-text">
+                    <div class="nd-item-title">New Enterprise Client</div>
+                    <div class="nd-item-sub">Mahindra Group signed annual plan</div>
+                    <div class="nd-time">1h ago</div>
+                  </div>
+                </div>
+                <div class="nd-item unread" onclick="markItemRead(this)">
+                  <span class="nd-icon">🤖</span>
+                  <div class="nd-text">
+                    <div class="nd-item-title">AI Insight Alert</div>
+                    <div class="nd-item-sub">Demand spike forecast in Bengaluru</div>
+                    <div class="nd-time">2h ago</div>
+                  </div>
+                </div>
+              </div>
+              <div class="nd-footer">
+                <button class="btn-view-all-notif" onclick="openNotifView()">View all notifications</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="topbar-avatar" id="topbar-user-avatar" title="Click to logout" onclick="logout()">SC</div>
         </div>
       </header>
 
@@ -231,15 +267,15 @@
         <!-- ════════ VIEW 1: CLEAN SIMPLE DASHBOARD ════════ -->
         <section class="view-panel active" id="view-dashboard-panel">
           
-          <!-- 4 CLEAN KPI CARDS -->
+          <!-- 4 SIMPLE CLEAN KPI CARDS (RUPEE DATA) -->
           <div class="dash-kpi-grid-clean">
             <div class="dash-kpi-card" id="dk-mon-rev">
               <div class="dk-top">
                 <span class="dk-lbl">Monthly Revenue</span>
                 <span class="dk-badge up">↑ 24.8%</span>
               </div>
-              <div class="dk-val">₹69.8 Cr</div>
-              <div class="dk-sub">vs ₹55.9 Cr last month</div>
+              <div class="dk-val">₹50.0 Lakhs</div>
+              <div class="dk-sub">Target ₹45.0 Lakhs</div>
             </div>
 
             <div class="dash-kpi-card" id="dk-profit">
@@ -247,8 +283,8 @@
                 <span class="dk-lbl">Net Profit</span>
                 <span class="dk-badge up">↑ 14.5%</span>
               </div>
-              <div class="dk-val">₹26.6 Cr</div>
-              <div class="dk-sub">38.2% margin</div>
+              <div class="dk-val">₹18.5 Lakhs</div>
+              <div class="dk-sub">37% net margin</div>
             </div>
 
             <div class="dash-kpi-card" id="dk-customers">
@@ -256,8 +292,8 @@
                 <span class="dk-lbl">Active Customers</span>
                 <span class="dk-badge up">↑ 12.0%</span>
               </div>
-              <div class="dk-val">4.5 Lakh</div>
-              <div class="dk-sub">94% retention rate</div>
+              <div class="dk-val">4,500</div>
+              <div class="dk-sub">94% retention</div>
             </div>
 
             <div class="dash-kpi-card" id="dk-cvr">
@@ -265,8 +301,8 @@
                 <span class="dk-lbl">Conversion Rate</span>
                 <span class="dk-badge up">↑ 3.1%</span>
               </div>
-              <div class="dk-val">12.7%</div>
-              <div class="dk-sub">Target 10% benchmark</div>
+              <div class="dk-val">12.5%</div>
+              <div class="dk-sub">Benchmark 10%</div>
             </div>
           </div>
 
@@ -275,8 +311,8 @@
             <div class="panel-card chart-panel-large">
               <div class="panel-header">
                 <div>
-                  <h3 class="panel-title">Revenue Growth Trend</h3>
-                  <p class="panel-sub">Real-time revenue monitoring in Indian Rupees (₹ Cr)</p>
+                  <h3 class="panel-title">Revenue Growth (₹)</h3>
+                  <p class="panel-sub">Monthly trend in Indian Rupees (₹ Lakhs)</p>
                 </div>
                 <div class="dca-tabs">
                   <button class="dca-tab active" id="tab-dash-1m">1M</button>
@@ -296,14 +332,14 @@
                 <canvas id="hero-donut" width="140" height="140"></canvas>
               </div>
               <div class="donut-legend-list">
-                <div class="dll-item"><span class="dll-dot" style="background:#2ECC71"></span>Enterprise (₹29.3 Cr)</div>
-                <div class="dll-item"><span class="dll-dot" style="background:#4ADE80"></span>Mid-Market (₹22.3 Cr)</div>
-                <div class="dll-item"><span class="dll-dot" style="background:#86efac"></span>SMB & Startup (₹18.2 Cr)</div>
+                <div class="dll-item"><span class="dll-dot" style="background:#2ECC71"></span>Enterprise (₹21 Lakhs)</div>
+                <div class="dll-item"><span class="dll-dot" style="background:#4ADE80"></span>Mid-Market (₹16 Lakhs)</div>
+                <div class="dll-item"><span class="dll-dot" style="background:#86efac"></span>SMB (₹13 Lakhs)</div>
               </div>
             </div>
           </div>
 
-          <!-- CLEAN BOTTOM ROW: Live Feed & Recent Activity -->
+          <!-- CLEAN BOTTOM ROW -->
           <div class="dash-bottom-grid">
             <div class="panel-card">
               <div class="panel-header">
@@ -318,28 +354,28 @@
             <div class="panel-card">
               <div class="panel-header">
                 <h3 class="panel-title">Top Regional Markets</h3>
-                <span class="csat-sub-text">India Operations</span>
+                <span class="csat-sub-text">India Sales</span>
               </div>
               <div class="region-list">
                 <div class="region-row">
                   <span class="reg-name">🏢 Mumbai (MH)</span>
                   <div class="reg-track"><div class="reg-fill" style="width:45%"></div></div>
-                  <span class="reg-val">₹31.4 Cr (45%)</span>
+                  <span class="reg-val">₹22.5 Lakhs (45%)</span>
                 </div>
                 <div class="region-row">
                   <span class="reg-name">💻 Bengaluru (KA)</span>
                   <div class="reg-track"><div class="reg-fill" style="width:30%"></div></div>
-                  <span class="reg-val">₹20.9 Cr (30%)</span>
+                  <span class="reg-val">₹15.0 Lakhs (30%)</span>
                 </div>
                 <div class="region-row">
                   <span class="reg-name">🏛 Delhi NCR</span>
                   <div class="reg-track"><div class="reg-fill" style="width:15%"></div></div>
-                  <span class="reg-val">₹10.4 Cr (15%)</span>
+                  <span class="reg-val">₹7.5 Lakhs (15%)</span>
                 </div>
                 <div class="region-row">
                   <span class="reg-name">🚀 Hyderabad (TS)</span>
                   <div class="reg-track"><div class="reg-fill" style="width:10%"></div></div>
-                  <span class="reg-val">₹7.1 Cr (10%)</span>
+                  <span class="reg-val">₹5.0 Lakhs (10%)</span>
                 </div>
               </div>
             </div>
@@ -351,13 +387,13 @@
         <section class="view-panel" id="view-analytics-panel">
           <div class="view-header">
             <h2>Sales & Revenue Analytics</h2>
-            <p>Clear analysis of sales performance and channel revenue in Rupees (₹).</p>
+            <p>Simple analysis of channel revenue in Rupees (₹).</p>
           </div>
 
           <div class="analytics-cards-grid">
             <div class="panel-card">
-              <h3 class="panel-title">Quarterly Revenue Trajectory (₹ Cr)</h3>
-              <p class="panel-sub">Revenue growth per quarter across India business units</p>
+              <h3 class="panel-title">Quarterly Revenue (₹ Lakhs)</h3>
+              <p class="panel-sub">Growth per quarter</p>
               <canvas id="fc-chart-1" width="600" height="200"></canvas>
             </div>
 
@@ -367,18 +403,18 @@
               <div class="region-list">
                 <div class="region-row">
                   <span class="reg-name">Direct Sales</span>
-                  <div class="reg-track"><div class="reg-fill" style="width:48%"></div></div>
-                  <span class="reg-val">₹33.5 Cr (48%)</span>
+                  <div class="reg-track"><div class="reg-fill" style="width:50%"></div></div>
+                  <span class="reg-val">₹25.0 Lakhs (50%)</span>
                 </div>
                 <div class="region-row">
-                  <span class="reg-name">Partner Ecosystem</span>
-                  <div class="reg-track"><div class="reg-fill" style="width:28%"></div></div>
-                  <span class="reg-val">₹19.5 Cr (28%)</span>
+                  <span class="reg-name">Partner Channel</span>
+                  <div class="reg-track"><div class="reg-fill" style="width:30%"></div></div>
+                  <span class="reg-val">₹15.0 Lakhs (30%)</span>
                 </div>
                 <div class="region-row">
-                  <span class="reg-name">Online Inbound</span>
-                  <div class="reg-track"><div class="reg-fill" style="width:24%"></div></div>
-                  <span class="reg-val">₹16.8 Cr (24%)</span>
+                  <span class="reg-name">Online Portal</span>
+                  <div class="reg-track"><div class="reg-fill" style="width:20%"></div></div>
+                  <span class="reg-val">₹10.0 Lakhs (20%)</span>
                 </div>
               </div>
             </div>
@@ -389,27 +425,25 @@
         <section class="view-panel" id="view-sales-panel">
           <div class="view-header">
             <h2>Sales Pipeline (₹)</h2>
-            <p>Deal pipeline tracking in Indian Rupees (₹).</p>
+            <p>Simple deal pipeline tracking.</p>
           </div>
 
           <div class="pipeline-grid">
             <div class="pipe-col">
-              <div class="pipe-header">Prospecting <span class="pipe-count">14</span></div>
-              <div class="deal-card"><div class="dc-name">Tata Digital</div><div class="dc-val">₹1.20 Cr</div><div class="dc-tag">Enterprise</div></div>
-              <div class="deal-card"><div class="dc-name">Zomato Labs</div><div class="dc-val">₹45 Lakh</div><div class="dc-tag">Mid-Market</div></div>
+              <div class="pipe-header">Prospecting <span class="pipe-count">4</span></div>
+              <div class="deal-card"><div class="dc-name">Tata Digital</div><div class="dc-val">₹12 Lakhs</div><div class="dc-tag">Enterprise</div></div>
             </div>
             <div class="pipe-col">
-              <div class="pipe-header">Qualified <span class="pipe-count">8</span></div>
-              <div class="deal-card"><div class="dc-name">Infosys Consulting</div><div class="dc-val">₹2.80 Cr</div><div class="dc-tag">Enterprise</div></div>
-              <div class="deal-card"><div class="dc-name">Swiggy Tech</div><div class="dc-val">₹95 Lakh</div><div class="dc-tag">Mid-Market</div></div>
+              <div class="pipe-header">Qualified <span class="pipe-count">3</span></div>
+              <div class="deal-card"><div class="dc-name">Infosys Consulting</div><div class="dc-val">₹28 Lakhs</div><div class="dc-tag">Enterprise</div></div>
             </div>
             <div class="pipe-col">
-              <div class="pipe-header">Proposal <span class="pipe-count">5</span></div>
-              <div class="deal-card"><div class="dc-name">Reliance Retail</div><div class="dc-val">₹3.40 Cr</div><div class="dc-tag">Enterprise</div></div>
+              <div class="pipe-header">Proposal <span class="pipe-count">2</span></div>
+              <div class="deal-card"><div class="dc-name">Reliance Retail</div><div class="dc-val">₹34 Lakhs</div><div class="dc-tag">Enterprise</div></div>
             </div>
             <div class="pipe-col">
-              <div class="pipe-header">Closed Won <span class="pipe-count">24</span></div>
-              <div class="deal-card won"><div class="dc-name">Mahindra Group</div><div class="dc-val">₹5.20 Cr</div><div class="dc-tag">Enterprise</div></div>
+              <div class="pipe-header">Closed Won <span class="pipe-count">8</span></div>
+              <div class="deal-card won"><div class="dc-name">Mahindra Group</div><div class="dc-val">₹50 Lakhs</div><div class="dc-tag">Enterprise</div></div>
             </div>
           </div>
         </section>
@@ -418,30 +452,24 @@
         <section class="view-panel" id="view-customers-panel">
           <div class="view-header">
             <h2>Customer Directory</h2>
-            <p>Customer accounts, plan tiers, and total spend in Rupees (₹).</p>
+            <p>Simple customer account summary.</p>
           </div>
 
           <div class="data-table-card">
-            <div class="table-toolbar">
-              <input type="text" class="table-search" placeholder="Search customer accounts..." />
-              <button class="btn-table-opt">Filter Plan ▾</button>
-            </div>
             <table class="custom-table">
               <thead>
                 <tr>
                   <th>Customer</th>
                   <th>Company</th>
                   <th>Plan Tier</th>
-                  <th>Total Spent (₹)</th>
-                  <th>Health Score</th>
+                  <th>Spend (₹)</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                <tr><td>Sarah Chen</td><td>Mahindra Tech</td><td><span class="badge-tier">Enterprise</span></td><td>₹1.42 Cr</td><td>98/100</td><td><span class="badge-active">Active</span></td></tr>
-                <tr><td>Marcus Rivera</td><td>Reliance Retail</td><td><span class="badge-tier">Enterprise</span></td><td>₹98.4 Lakh</td><td>94/100</td><td><span class="badge-active">Active</span></td></tr>
-                <tr><td>Priya Nair</td><td>Infosys Labs</td><td><span class="badge-tier">Growth</span></td><td>₹42.1 Lakh</td><td>89/100</td><td><span class="badge-active">Active</span></td></tr>
-                <tr><td>David Kim</td><td>Swiggy Tech</td><td><span class="badge-tier">Starter</span></td><td>₹12.8 Lakh</td><td>76/100</td><td><span class="badge-warning">Risk</span></td></tr>
+                <tr><td>Sarah Chen</td><td>Mahindra Group</td><td><span class="badge-tier">Enterprise</span></td><td>₹14.2 Lakhs</td><td><span class="badge-active">Active</span></td></tr>
+                <tr><td>Alex Morgan</td><td>Reliance Retail</td><td><span class="badge-tier">Enterprise</span></td><td>₹9.8 Lakhs</td><td><span class="badge-active">Active</span></td></tr>
+                <tr><td>Priya Nair</td><td>Infosys Tech</td><td><span class="badge-tier">Growth</span></td><td>₹4.2 Lakhs</td><td><span class="badge-active">Active</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -451,30 +479,22 @@
         <section class="view-panel" id="view-products-panel">
           <div class="view-header">
             <h2>Products & Pricing (₹)</h2>
-            <p>Product line performance in Indian Rupees.</p>
           </div>
 
           <div class="products-grid">
             <div class="prod-card">
               <div class="pc-icon">⚡</div>
               <h3>Lumora Enterprise Suite</h3>
-              <p class="pc-cat">Full Analytics Stack</p>
-              <div class="pc-price-tag">₹4,99,999 / mo</div>
-              <div class="pc-stats"><span>Active Sales: 480</span><span>Rev: ₹23.9 Cr</span></div>
+              <p class="pc-cat">Full Stack</p>
+              <div class="pc-price-tag">₹4,99,999 / yr</div>
+              <div class="pc-stats"><span>Active Users: 480</span><span>Rev: ₹24 Lakhs</span></div>
             </div>
             <div class="prod-card">
               <div class="pc-icon">📊</div>
               <h3>Lumora Pro Analytics</h3>
-              <p class="pc-cat">Mid-Market Stack</p>
-              <div class="pc-price-tag">₹49,999 / mo</div>
-              <div class="pc-stats"><span>Active Sales: 1,840</span><span>Rev: ₹9.18 Cr</span></div>
-            </div>
-            <div class="prod-card">
-              <div class="pc-icon">🔌</div>
-              <h3>API Data Stream Connector</h3>
-              <p class="pc-cat">Add-on Module</p>
-              <div class="pc-price-tag">₹19,999 / mo</div>
-              <div class="pc-stats"><span>Active Sales: 3,200</span><span>Rev: ₹6.36 Cr</span></div>
+              <p class="pc-cat">Mid-Market</p>
+              <div class="pc-price-tag">₹49,999 / yr</div>
+              <div class="pc-stats"><span>Active Users: 1,840</span><span>Rev: ₹16 Lakhs</span></div>
             </div>
           </div>
         </section>
@@ -482,8 +502,7 @@
         <!-- ════════ VIEW 6: ORDERS ════════ -->
         <section class="view-panel" id="view-orders-panel">
           <div class="view-header">
-            <h2>Orders & Transactions (₹)</h2>
-            <p>Real-time transaction history in Rupees.</p>
+            <h2>Recent Orders (₹)</h2>
           </div>
 
           <div class="data-table-card">
@@ -494,8 +513,6 @@
               <tbody>
                 <tr><td>#ORD-9842</td><td>Mahindra Group</td><td>Today, 14:22</td><td>₹2,40,000</td><td><span class="badge-active">Completed</span></td></tr>
                 <tr><td>#ORD-9841</td><td>Tata Digital</td><td>Today, 13:45</td><td>₹98,000</td><td><span class="badge-active">Completed</span></td></tr>
-                <tr><td>#ORD-9840</td><td>Infosys Consulting</td><td>Today, 11:10</td><td>₹4,50,000</td><td><span class="badge-pending">Processing</span></td></tr>
-                <tr><td>#ORD-9839</td><td>Zomato Tech</td><td>Yesterday</td><td>₹1,20,000</td><td><span class="badge-active">Completed</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -505,37 +522,26 @@
         <section class="view-panel" id="view-revenue-panel">
           <div class="view-header">
             <h2>Revenue Breakdown (₹)</h2>
-            <p>MRR and ARR metrics in Indian Rupees.</p>
           </div>
 
           <div class="dash-kpi-grid-clean">
-            <div class="dash-kpi-card"><div class="dk-lbl">Monthly Recurring Revenue (MRR)</div><div class="dk-val">₹5.81 Cr</div></div>
-            <div class="dash-kpi-card"><div class="dk-lbl">Annual Recurring Revenue (ARR)</div><div class="dk-val">₹69.8 Cr</div></div>
-            <div class="dash-kpi-card"><div class="dk-lbl">Avg Revenue Per User (ARPU)</div><div class="dk-val">₹1,550</div></div>
-            <div class="dash-kpi-card"><div class="dk-lbl">Net Revenue Retention (NRR)</div><div class="dk-val">118%</div></div>
+            <div class="dash-kpi-card"><div class="dk-lbl">Monthly Revenue</div><div class="dk-val">₹50.0 Lakhs</div></div>
+            <div class="dash-kpi-card"><div class="dk-lbl">Annual Revenue</div><div class="dk-val">₹6.0 Crores</div></div>
           </div>
         </section>
 
         <!-- ════════ VIEW 8: AI INSIGHTS ════════ -->
         <section class="view-panel" id="view-ai-insights-panel">
           <div class="view-header">
-            <h2>🤖 Lumora AI Intelligence</h2>
-            <p>Predictive recommendations for growth.</p>
+            <h2>🤖 Lumora AI Insights</h2>
           </div>
 
           <div class="ai-cards-grid">
             <div class="panel-card ai-card">
               <div class="ai-icon">📊</div>
               <h3>Sales Prediction</h3>
-              <p>Lumora AI projects +18% Q4 revenue growth based on deal velocity in qualified pipeline.</p>
+              <p>Lumora AI projects +18% growth next quarter based on current pipeline.</p>
               <div class="ai-confidence">Confidence: 98%</div>
-            </div>
-
-            <div class="panel-card ai-card">
-              <div class="ai-icon">🔮</div>
-              <h3>Regional Growth Spike</h3>
-              <p>High demand spike predicted in Bengaluru tech cluster (+34% next quarter).</p>
-              <div class="ai-confidence">Confidence: 95%</div>
             </div>
           </div>
         </section>
@@ -543,12 +549,11 @@
         <!-- ════════ VIEW 9: FORECAST ════════ -->
         <section class="view-panel" id="view-forecast-panel">
           <div class="view-header">
-            <h2>📅 Financial Forecast (₹)</h2>
-            <p>18-month projected revenue trajectory.</p>
+            <h2>📅 Financial Forecast</h2>
           </div>
 
           <div class="panel-card">
-            <h3 class="panel-title">18-Month Projected Growth (₹ Cr)</h3>
+            <h3 class="panel-title">Revenue Forecast (₹ Lakhs)</h3>
             <canvas id="metrics-sparkline" width="700" height="180"></canvas>
           </div>
         </section>
@@ -556,28 +561,17 @@
         <!-- ════════ VIEW 10: REPORTS ════════ -->
         <section class="view-panel" id="view-reports-panel">
           <div class="view-header">
-            <h2>📄 Automated Business Reports</h2>
-            <p>Export executive reports in PDF or Excel.</p>
+            <h2>📄 Business Reports</h2>
           </div>
 
           <div class="reports-grid">
             <div class="panel-card report-item">
               <div class="ri-icon">📊</div>
-              <h4>Daily Revenue Report (₹)</h4>
-              <p>Updated daily at 00:00 IST</p>
+              <h4>Monthly Revenue Report (₹)</h4>
+              <p>Updated on 1st of month</p>
               <div class="report-actions">
-                <button class="btn-report btn-pdf" onclick="alert('Downloading Daily Report PDF...')">Export PDF</button>
-                <button class="btn-report btn-excel" onclick="alert('Downloading Daily Report Excel...')">Export Excel</button>
-              </div>
-            </div>
-
-            <div class="panel-card report-item">
-              <div class="ri-icon">📅</div>
-              <h4>Monthly Financial Summary</h4>
-              <p>Updated 1st of every month</p>
-              <div class="report-actions">
-                <button class="btn-report btn-pdf" onclick="alert('Downloading Monthly Report PDF...')">Export PDF</button>
-                <button class="btn-report btn-excel" onclick="alert('Downloading Monthly Report Excel...')">Export Excel</button>
+                <button class="btn-report btn-pdf" onclick="alert('Downloading PDF...')">Export PDF</button>
+                <button class="btn-report btn-excel" onclick="alert('Downloading Excel...')">Export Excel</button>
               </div>
             </div>
           </div>
@@ -587,15 +581,14 @@
         <section class="view-panel" id="view-notifications-panel">
           <div class="view-header">
             <h2>🔔 System Notifications</h2>
-            <p>Recent business notifications.</p>
           </div>
 
-          <div class="notif-list">
+          <div class="notif-list" id="notif-view-list">
             <div class="notif-card unread">
               <div class="nc-icon">💰</div>
               <div class="nc-text">
                 <div class="nc-title">Revenue Target Reached</div>
-                <div class="nc-sub">Q3 target of ₹65.0 Cr achieved ahead of schedule!</div>
+                <div class="nc-sub">Monthly target of ₹50.0 Lakhs achieved!</div>
                 <div class="nc-time">10 minutes ago</div>
               </div>
             </div>
@@ -605,18 +598,13 @@
         <!-- ════════ VIEW 12: SETTINGS ════════ -->
         <section class="view-panel" id="view-settings-panel">
           <div class="view-header">
-            <h2>⚙️ System Settings</h2>
-            <p>Manage workspace configuration.</p>
+            <h2>⚙️ Settings</h2>
           </div>
 
           <div class="panel-card settings-form-card">
             <div class="form-group">
               <label>Company Name</label>
               <input type="text" value="Lumora Analytics India Pvt. Ltd." />
-            </div>
-            <div class="form-group">
-              <label>Primary Currency</label>
-              <input type="text" value="INR (₹ - Indian Rupee)" readonly />
             </div>
             <button class="btn-hero-primary" onclick="alert('Settings Saved!')">Save Changes</button>
           </div>
@@ -626,18 +614,17 @@
         <section class="view-panel" id="view-profile-panel">
           <div class="view-header">
             <h2>👤 User Profile</h2>
-            <p>Manage account credentials.</p>
           </div>
 
           <div class="panel-card profile-card">
             <div class="prof-header">
-              <div class="prof-avatar">SC</div>
+              <div class="prof-avatar" id="profile-page-avatar">SC</div>
               <div>
-                <h3>Sarah Chen</h3>
-                <p>VP of Operations • Administrator</p>
+                <h3 id="profile-page-name">Sarah Chen</h3>
+                <p id="profile-page-role">VP of Operations • Admin</p>
               </div>
             </div>
-            <button class="btn-report btn-pdf" style="margin-top: 16px; width: fit-content;" onclick="logout()">Logout of Lumora</button>
+            <button class="btn-report btn-pdf" style="margin-top: 16px; width: fit-content;" onclick="logout()">Logout</button>
           </div>
         </section>
 
