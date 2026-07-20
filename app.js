@@ -147,8 +147,10 @@ function initAuth() {
     if (profNameEl) profNameEl.textContent = p.name;
     if (profRoleEl) profRoleEl.textContent = p.role;
 
-    loginScreen.style.display = 'none';
-    appLayout.style.display = 'flex';
+    const ls = $('#login-screen');
+    const al = $('#app-layout');
+    if (ls) ls.style.display = 'none';
+    if (al) al.style.display = 'flex';
 
     setTimeout(() => {
       initHeroChart();
